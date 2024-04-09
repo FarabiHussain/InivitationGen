@@ -17,7 +17,7 @@ class FormEntry:
         self.textV_name = f"{prefix}_textVariable"
         self.input_name = f"{prefix}_input"
 
-        short_label = label_text.replace("Guest ", "").replace("Host 1 ", "").replace("Host 2 ", "")
+        short_label = label_text.capitalize().replace("Guest ", "").replace("Host 1 ", "").replace("Host 2 ", "")
 
         ctk.CTkLabel(
             master, text=short_label, font=vars.font_family
@@ -29,8 +29,10 @@ class FormEntry:
             master,
             width=250,
             height=32,
-            border_width=1,
+            border_width=0,
             corner_radius=2,
+            bg_color="#fff",
+            fg_color="#ddd",
             textvariable=vars.form[self.textV_name],
         )
 
@@ -45,4 +47,9 @@ class FormEntry:
         """set the entry's data"""
         textvar = vars.form[self.textV_name]
         textvar.set(new_text)
+
+    def reset(self) -> None:
+        """reset the entry's data"""
+        textvar = vars.form[self.textV_name]
+        textvar.set("")
 
