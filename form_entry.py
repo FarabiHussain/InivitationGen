@@ -43,7 +43,7 @@ class FormEntry:
         field = vars.form[self.input_name]
         return field.get()
 
-    def set(self, new_text: str) -> None:
+    def set(self, new_text: str = "") -> None:
         """set the entry's data"""
         textvar = vars.form[self.textV_name]
         textvar.set(new_text)

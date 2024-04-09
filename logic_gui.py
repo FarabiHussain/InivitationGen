@@ -1,7 +1,7 @@
 from tkinter import StringVar
 import variables as vars
 import customtkinter as ctk
-import re
+import re, names, random
 from CTkMessagebox import CTkMessagebox as popup
 from icecream import ic
 
@@ -14,39 +14,44 @@ def clear_fields():
 
 
 def testfill_fields():
-    
-    vars.guest_fields["guest_name"] = None
-    vars.guest_fields["guest_birth"] = None
-    vars.guest_fields["guest_citizenship"] = None
-    vars.guest_fields["guest_passport"] = None
-    vars.guest_fields["guest_address"] = None
-    vars.guest_fields["guest_phone"] = None
-    vars.guest_fields["guest_occupation"] = None
-    vars.guest_fields["guest_purpose"] = None
-    vars.guest_fields["guest_arrival"] = None
-    vars.guest_fields["guest_departure"] = None
-    vars.guest_fields["guest_relationship"] = None
-    vars.guest_fields["guest_canadian_address"] = None
+    host1_gender = random.choice(['male', 'female'])
+    host2_gender = 'male' if host1_gender == 'female' else 'female'
+    host1_name = names.get_full_name(gender=host1_gender)
+    host2_name = names.get_full_name(gender=host2_gender)
+    guest_name = names.get_full_name(gender=random.choice(['male', 'female']))
 
-    vars.host1_fields["host_1_name"] = None
-    vars.host1_fields["host_1_birth"] = None
-    vars.host1_fields["host_1_status"] = None
-    vars.host1_fields["host_1_passport"] = None
-    vars.host1_fields["host_1_address"] = None
-    vars.host1_fields["host_1_phone"] = None
-    vars.host1_fields["host_1_occupation"] = None
-    vars.host1_fields["host_1_email"] = None
-    vars.host1_fields["host_1_relation_to_host_2"] = None
+    vars.guest_fields["guest_name"].set(guest_name)
+    vars.guest_fields["guest_birth"].set("January 1st, 1994")
+    vars.guest_fields["guest_citizenship"].set("United Kingdom")
+    vars.guest_fields["guest_passport"].set("XXXXXXXXX")
+    vars.guest_fields["guest_address"].set("100 Some Place, City, Country")
+    vars.guest_fields["guest_phone"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
+    vars.guest_fields["guest_occupation"].set("Student")
+    vars.guest_fields["guest_purpose"].set("Visit")
+    vars.guest_fields["guest_arrival"].set("April 30, 2024")
+    vars.guest_fields["guest_departure"].set("April 15, 2024")
+    vars.guest_fields["guest_relationship"].set("brother")
+    vars.guest_fields["guest_canadian_address"].set("100 Random Street, Winnipeg, MB")
 
-    vars.host2_fields["host_2_name"] = None
-    vars.host2_fields["host_2_birth"] = None
-    vars.host2_fields["host_2_status"] = None
-    vars.host2_fields["host_2_passport"] = None
-    vars.host2_fields["host_2_address"] = None
-    vars.host2_fields["host_2_phone"] = None
-    vars.host2_fields["host_2_occupation"] = None
-    vars.host2_fields["host_2_email"] = None
-    vars.host2_fields["host_2_relation_to_host_1"] = None
+    vars.host1_fields["host_1_name"].set(host1_name)
+    vars.host1_fields["host_1_birth"].set("January 1st, 1990")
+    vars.host1_fields["host_1_status"].set("Citizen")
+    vars.host1_fields["host_1_passport"].set("YYYYYYYYY")
+    vars.host1_fields["host_1_address"].set("100 Random Street, Winnipeg, MB")
+    vars.host1_fields["host_1_phone"].set(host1_name.replace(" ", "").lower() + "@email.com")
+    vars.host1_fields["host_1_occupation"].set("Project Manager")
+    vars.host1_fields["host_1_email"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
+    vars.host1_fields["host_1_relation_to_host_2"].set("wife")
+
+    vars.host2_fields["host_2_name"].set(host2_name)
+    vars.host2_fields["host_2_birth"].set("December 31, 1992")
+    vars.host2_fields["host_2_status"].set("Citizen")
+    vars.host2_fields["host_2_passport"].set("ZZZZZZZZZ")
+    vars.host2_fields["host_2_address"].set("100 Random Street, Winnipeg, MB")
+    vars.host2_fields["host_2_phone"].set(host1_name.replace(" ", "").lower() + "@email.com")
+    vars.host2_fields["host_2_occupation"].set("Health Care Worker")
+    vars.host2_fields["host_2_email"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
+    vars.host2_fields["host_2_relation_to_host_1"].set("husband")
 
 
 # perform a check for the presence of special characters

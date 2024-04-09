@@ -28,7 +28,14 @@ def init():
 
     form_data['[HOST1_NAME]'] = vars.host1_fields['host_1_name'].get()
     form_data['[HOST1_BIRTH]'] = vars.host1_fields['host_1_birth'].get()
+    form_data['[HOST1_STATUS]'] = vars.host1_fields['host_1_status'].get()
+    form_data['[HOST1_PASSPORT]'] = vars.host1_fields['host_1_passport'].get()
     form_data['[HOST1_ADDRESS]'] = vars.host1_fields['host_1_address'].get()
+    form_data['[HOST1_PHONE]'] = vars.host1_fields['host_1_phone'].get()
+    form_data['[HOST1_OCCUPATION]'] = vars.host1_fields['host_1_occupation'].get()
+    form_data['[HOST1_EMAIL]'] = vars.host1_fields['host_1_email'].get()
+    form_data['[HOST1_RELATION_TO_HOST2]'] = vars.host1_fields['host_1_relation_to_host_2'].get()
+
     form_data['[GUEST_NAME]'] = vars.guest_fields['guest_name'].get()
     form_data['[GUEST_BIRTH]'] = vars.guest_fields['guest_birth'].get()
     form_data['[GUEST_PASSPORT]'] = vars.guest_fields['guest_passport'].get()
