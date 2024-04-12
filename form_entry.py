@@ -17,7 +17,7 @@ class FormEntry:
         self.textV_name = f"{prefix}_textVariable"
         self.input_name = f"{prefix}_input"
 
-        short_label = label_text.capitalize().replace("Guest ", "").replace("Host 1 ", "").replace("Host 2 ", "")
+        short_label = label_text.capitalize().replace("Guest ", "").replace("Host1 ", "").replace("Host2 ", "")
 
         ctk.CTkLabel(
             master, text=short_label, font=vars.font_family

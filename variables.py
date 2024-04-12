@@ -65,26 +65,26 @@ def init():
     }
 
     host1_fields = {
-        "host_1_name": None,
-        "host_1_birth": None,
-        "host_1_status": None,
-        "host_1_passport": None,
-        "host_1_address": None,
-        "host_1_phone": None,
-        "host_1_occupation": None,
-        "host_1_email": None,
-        "host_1_relation_to_host_2": None,
+        "host1_name": None,
+        "host1_birth": None,
+        "host1_status": None,
+        "host1_passport": None,
+        "host1_address": None,
+        "host1_phone": None,
+        "host1_occupation": None,
+        "host1_email": None,
+        "host1_relation_to_host2": None,
     }
 
     host2_fields = {
-        "host_2_name": None,
-        "host_2_birth": None,
-        "host_2_status": None,
-        "host_2_passport": None,
-        "host_2_address": None,
-        "host_2_phone": None,
-        "host_2_occupation": None,
-        "host_2_email": None,
-        "host_2_relation_to_host_1": None,
+        "host2_name": None,
+        "host2_birth": None,
+        "host2_status": None,
+        "host2_passport": None,
+        "host2_address": None,
+        "host2_phone": None,
+        "host2_occupation": None,
+        "host2_email": None,
+        "host2_relation_to_host1": None,
     }
 
