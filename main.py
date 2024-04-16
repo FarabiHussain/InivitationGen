@@ -76,7 +76,7 @@ for current_dict, current_frame in zip(field_dicts, field_frames):
 
 vars.form['test_btn'] = ctk.CTkButton(vars.root, text="TEST", border_width=0, corner_radius=2, command=lambda:testfill_fields(), width=72, height=36)
 vars.form['clear_btn'] = ctk.CTkButton(vars.root, text="", image=vars.icons['clear'], border_width=0, corner_radius=2, fg_color="#c41212", command=lambda:clear_fields(), width=72, height=36)
-vars.form['docx_btn'] = ctk.CTkButton(vars.root, text="", image=vars.icons['docx'], border_width=0, corner_radius=2, fg_color="#383FBC", command=lambda:process_docs(), width=72, height=36)
+vars.form['docx_btn'] = ctk.CTkButton(vars.root, text="", image=vars.icons['docx'], border_width=0, corner_radius=2, fg_color="#383FBC", command=lambda:generate_doc(), width=72, height=36)
 # vars.form['output_btn'] = ctk.CTkButton(vars.root, text="", image=vars.icons['folder'], border_width=0, corner_radius=2, fg_color="#808080", command=lambda:os.startfile(cwd + "\\output"), width=72, height=36)
 
 vars.form['test_btn'].place(x=w-470, y=h-60)
@@ -84,5 +84,7 @@ vars.form['clear_btn'].place(x=w-380, y=h-60)
 vars.form['docx_btn'].place(x=w-290, y=h-60)
 # vars.form['output_btn'].place(x=w-200, y=h-60)
 
-
+testfill_fields()
+generate_doc()
 vars.root.mainloop()
+vars.root.after(500, lambda: vars.root.destroy())

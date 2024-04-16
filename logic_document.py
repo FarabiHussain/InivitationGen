@@ -3,10 +3,12 @@ import datetime
 import variables as vars
 from docx import Document
 from docx.shared import Cm as CM
+from docx.shared import Pt as PT
 from CTkMessagebox import CTkMessagebox as popup
 from path_manager import resource_path
 from utils import *
 from icecream import ic
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 
 ## initializes the fill info, output and input files
@@ -25,7 +27,7 @@ def init():
 
     # set the input and output files
     input_file = resource_path("assets\\templates\\double.docx")
-    output_file = f"Invitation & Declaration - {vars.guest_fields['guest_name'].get()}.docx"
+    output_file = f"{vars.guest_fields['guest_name'].get()}_{(datetime.datetime.now().timestamp())}.docx"
 
     form_data['[HOST1_NAME]'] = vars.host1_fields['host1_name'].get()
     form_data['[HOST1_BIRTH]'] = vars.host1_fields['host1_birth'].get()
@@ -68,40 +70,110 @@ def init():
 
 
 ## generate the docx with the input info
-def process_docs():
-
+def generate_doc():
     init_data = None
     doc = None
 
     # initiate the data and document
     try:
         init_data = init()
-        ic(init_data)
         doc = Document(init_data['input_file'])
     except Exception as e:
         popup(title="", message='Exception in init(): ' + str(e), corner_radius=4)
         return False
 
-    # edit the document 
-
-    current_replace = ""
-
+    # replace placeholders on the document
     try:
+        current_replace = ""
         for paragraph in doc.paragraphs:
             for key, value in init_data['form_data'].items():
                 if key in paragraph.text:
                     for run in paragraph.runs:
                         current_replace = value
                         run.text = run.text.replace(key, value)
-
-        write_table(doc, [])
-
     except Exception as e:
-        # popup(title="", message='Exception while editing document: ' + str(e), corner_radius=4)
-        popup(title="", message='Exception while editing document: ' + current_replace, corner_radius=4)
+        popup(title="", message=f'Exception while editing document\n\nPlacing {current_replace}\n\n{e}', corner_radius=4)
         return False
 
-    # set up folders and save files, print if needed
+    # add the table containing host1's details
+    insert_table(
+        document=doc, 
+        table_heading="\nMy details are as follows.",
+        table_items=[
+            {"label": "Full Name", "info": vars.host1_fields['host1_name'].get()},
+            {"label": "Date of Birth", "info": vars.host1_fields['host1_birth'].get()},
+            {"label": "Canadian Status", "info": vars.host1_fields['host1_status'].get()},
+            {"label": "Passport Number", "info": vars.host1_fields['host1_passport'].get()},
+            {"label": "Residential Address", "info": vars.host1_fields['host1_address'].get()},
+            {"label": "Phone Number", "info": vars.host1_fields['host1_phone'].get()},
+            {"label": "Current Occupation", "info": vars.host1_fields['host1_occupation'].get()},
+            {"label": "Email Address", "info": vars.host1_fields['host1_email'].get()},
+        ]
+    )
+
+    # add the table containing host2's details
+    insert_table(
+        document=doc, 
+        table_heading=f"\n\nMy {vars.host1_fields['host1_relation_to_host2'].get()}'s details as follows.",
+        table_items=[
+            {"label": "Full Name", "info": vars.host2_fields['host2_name'].get()},
+            {"label": "Date of Birth", "info": vars.host2_fields['host2_birth'].get()},
+            {"label": "Canadian Status", "info": vars.host2_fields['host2_status'].get()},
+            {"label": "Passport Number", "info": vars.host2_fields['host2_passport'].get()},
+            {"label": "Residential Address", "info": vars.host2_fields['host2_address'].get()},
+            {"label": "Phone Number", "info": vars.host2_fields['host2_phone'].get()},
+            {"label": "Current Occupation", "info": vars.host2_fields['host2_occupation'].get()},
+            {"label": "Email Address", "info": vars.host2_fields['host2_email'].get()},
+        ]
+    )
+
+    doc.add_page_break() 
+
+    # add the table containing guest's details
+    insert_table(
+        document=doc, 
+        table_heading="The details of the invitee are as follows.",
+        table_items=[
+            {"label": "Full Name", "info": vars.guest_fields['guest_name'].get()},
+            {"label": "Date of Birth", "info": vars.guest_fields['guest_birth'].get()},
+            {"label": "Residential Address", "info": vars.guest_fields['guest_address'].get()},
+            {"label": "Phone Number", "info": vars.guest_fields['guest_phone'].get()},
+            {"label": "Current Occupation", "info": vars.guest_fields['guest_occupation'].get()},
+            {"label": "Relationship to Inviter", "info": vars.guest_fields['guest_relationship'].get()},
+            {"label": "Purpose of Visit", "info": vars.guest_fields['guest_purpose'].get()},
+            {"label": "Arrival Date", "info": vars.guest_fields['guest_arrival'].get()},
+            {"label": "Departure Date", "info": vars.guest_fields['guest_departure'].get()},
+            {"label": "Primary Residence in Canada", "info": vars.guest_fields['guest_canadian_address'].get()},
+        ]
+    )
+
+    insert_paragraph(
+        paragraph=doc.add_paragraph(),
+        text=(
+            f"\nThe airfare, travel expenses, would be borne by {vars.guest_fields['guest_name'].get()}. " +
+            f"All expenses in connection with {vars.guest_fields['guest_name'].get()}’s visit to Canada will be [BEARER]. " +
+            f"Attached with the application are [ATTACHED]." +
+            f"\n\nIf any clarification or information is required, please do not hesitate to contact us at our email addresses and phone numbers below."
+        )
+    )
+
+    # add the table containing guest's details
+    insert_table(
+        document=doc, 
+        table_heading="\n\n\n\n",
+        table_items=[
+            {"label": "_______________________________", "info": "_______________________________"},
+            {"label": vars.host1_fields['host1_name'].get(), "info": vars.host2_fields['host2_name'].get()},
+            {"label": vars.host1_fields['host1_email'].get(), "info": vars.host2_fields['host2_email'].get()},
+            {"label": vars.host1_fields['host1_phone'].get(), "info": vars.host2_fields['host2_phone'].get()},
+        ]
+    )
+
+    # create the output file
+    save_doc(doc, init_data)
+
+# set up folders and save files, print if needed
+def save_doc(doc, init_data):
     try:
         # set up the output directory
         output_dir = os.getcwd() + "\\output\\"
@@ -116,86 +188,68 @@ def process_docs():
 
         # return the filename
         return init_data['output_file']
-
     except Exception as e:
-        print('Exception: ' + str(e))
+        ic(e)
         popup(title="", message='Exception: ' + str(e), corner_radius=4)
         return False
 
 
-# itemized table
-def write_table(document, data):
-
+# insert table with the passed data
+def insert_table(document, table_heading=None, table_items=[], table_props={}):
     style = document.styles['Normal']
     font = style.font
     font.name = 'Times New Roman'
 
-    # Table data in a form of list
-    table_items = [
-        {"label": "", "data": "", "width": 20.0},
-    ]
+    # add the table heading
+    try:
+        if table_heading is not None:
+            insert_paragraph(
+                paragraph=document.add_paragraph(),
+                text=table_heading,
+                bolded=True,
+                italicized=False
+            )
+    except Exception as e:
+        popup(title="", message=f'Exception when adding table heading: {table_heading}\n\n{e}', corner_radius=4)
+        return False
 
-    # Creating a table object
-    table_obj = document.add_table(rows=1, cols=len(table_items))
+    # add the table contents
+    try:
+        # Creating a table object
+        table_obj = document.add_table(rows=len(table_items), cols=len(table_items[0]))
 
-    # add heading in the 1st row of the table
-    row = table_obj.rows[0].cells
-    for idx, col in enumerate(table_items):
-        row[idx].text = col["heading"]
+        # add rows
+        for idx, row in enumerate(table_obj.rows):
+            curr_row = row.cells
+            row.height = CM(0.50)
+            curr_row[0].text = table_items[idx]['label']
+            curr_row[0].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
+            curr_row[1].text = table_items[idx]['info']
+            curr_row[1].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
 
-    # # add data from the list to the table
-    # for index, entry in enumerate(data):
-
-    #     # Adding a row and then adding data in it.
-    #     row = table_obj.add_row().cells
-
-    #     row[0].text = str(index + 1)
-    #     row[1].text = str(entry["desc"])
-    #     row[2].text = str(entry["qty"])
-    #     row[3].text = str(entry["rate"])
-    #     row[4].text = str(int(entry["qty"]) * float(entry["rate"]))
-
-    # set the table borders
-    for cell in table_obj.rows[0].cells:
-        set_cell_border(cell, bottom={"sz": 6, "color": "#AAAAAA", "val": "single", "space": "10"})
-        set_cell_border(cell, top={"sz": 6, "color": "#AAAAAA", "val": "single", "space": "15"})
-
-    # set column widths
-    for idx, col in enumerate(table_items):
-        for index, cell in enumerate(table_obj.columns[idx].cells):
-            cell.width = CM(col["width"])
-
-            if index > 0:
-                set_cell_border(cell, bottom={"sz": 6, "color": "#DDDDDD", "val": "single", "space": "15"},)
-
-        set_cell_border(cell, bottom={"sz": 6, "color": "#AAAAAA", "val": "single", "space": "0"})
-
-    # set row heights
-    for index, row in enumerate(table_obj.rows):
-        row.height = CM(1)
-
-    # make_rows_bold(table_obj.rows[0])
+        # set column widths and borders
+        for idx, _ in enumerate(table_items[0]):
+            for cell in (table_obj.columns[idx].cells):
+                cell.width = CM(10)
+                set_cell_border(cell, top={"sz": 1, "color": "#AAAAAA", "val": "single", "space": "4"})
+                set_cell_border(cell, bottom={"sz": 1, "color": "#AAAAAA", "val": "single", "space": "0"})
+    except Exception as e:
+        popup(title="", message=f'Exception when adding table contents\n\n{e}', corner_radius=4)
+        return False
 
 
-# table containing taxes and total
-def write_totals_table(document): 
-    total_table = document.add_table(rows=1, cols=5)
+# insert a new paragraph
+def insert_paragraph(paragraph, text="", bolded=False, italicized=False):
 
-    gst = vars.form['gst_display_amount'].cget("text")
-    pst = vars.form['pst_display_amount'].cget("text")
-    total = vars.form['total_display_amount'].cget("text")
+    if bolded or italicized:
+        runner = paragraph.add_run(text)
+        runner.bold = bolded
+        runner.italic = italicized
 
-    total_table_data = [
-        [str("GST @5%"), "", "", "", gst],
-        [str("PST @7%"), "", "", "", pst],
-        [str("TOTAL"), "", "", "", total],
-    ]
-
-    for total_row in total_table_data:
-        row = total_table.add_row().cells
-
-        for idx, col in enumerate(total_row):
-            row[idx].text = col
-
-        make_rows_bold(total_table.rows[-1])
-
+    else:
+        new_p = OxmlElement("w:p")
+        paragraph._p.addnext(new_p)
+        paragraph.paragraph_format.space_before = PT(0)
+        paragraph.paragraph_format.space_after = PT(0)
+        new_para = Paragraph(new_p, paragraph._parent)
+        new_para.add_run(text)

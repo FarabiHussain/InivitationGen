@@ -21,15 +21,15 @@ def testfill_fields():
     guest_name = names.get_full_name(gender=random.choice(['male', 'female']))
 
     vars.guest_fields["guest_name"].set("John Doe")
-    vars.guest_fields["guest_birth"].set("January 1st, 1994")
+    vars.guest_fields["guest_birth"].set("January 1, 1994")
     vars.guest_fields["guest_citizenship"].set("United Kingdom")
     vars.guest_fields["guest_passport"].set("XXXXXXXXX")
     vars.guest_fields["guest_address"].set("100 Some Place, City, Country")
     vars.guest_fields["guest_phone"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
     vars.guest_fields["guest_occupation"].set("Student")
     vars.guest_fields["guest_purpose"].set("Visit")
-    vars.guest_fields["guest_arrival"].set("April 30, 2024")
-    vars.guest_fields["guest_departure"].set("April 15, 2024")
+    vars.guest_fields["guest_arrival"].set("April 15, 2024")
+    vars.guest_fields["guest_departure"].set("April 30, 2024")
     vars.guest_fields["guest_relationship"].set("brother")
     vars.guest_fields["guest_canadian_address"].set("100 Random Street, Winnipeg, MB")
 
