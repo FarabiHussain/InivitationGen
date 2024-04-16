@@ -62,18 +62,6 @@ def set_row_color(row, color="FFFFFF"):
 
 
 ##
-def insert_paragraph_after(paragraph, text=None, style=None):
-    new_p = OxmlElement("w:p")
-    paragraph._p.addnext(new_p)
-    new_para = Paragraph(new_p, paragraph._parent)
-    if text:
-        new_para.add_run(text)
-    if style is not None:
-        new_para.style = style
-    return new_para
-
-
-##
 def set_cell_border(cell: _Cell, **kwargs):
     """
     Set cell`s border

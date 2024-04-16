@@ -6,8 +6,8 @@ from path_manager import resource_path
 
 ## initalize the variables to be used throughout the app
 def init():
-    global screen_sizes, form, root, popups, cwd, icons, font_family, label_counter
-    global  guest_fields, host1_fields, host2_fields
+    global screen_sizes, form, root, popups, cwd, icons, font_family, label_counter, combobox_counter
+    global guest1_fields, guest2_fields, guest3_fields, host1_fields, host2_fields, exp_docs_fields
 
     cwd = os.getcwd()
 
@@ -31,10 +31,7 @@ def init():
     # define the
     for icon_name in list(icons_specs.keys()):
         try:
-            icons_specs[icon_name] = Image.open(
-                resource_path("assets\\icons\\" + icon_name + ".png")
-            )
-
+            icons_specs[icon_name] = Image.open(resource_path("assets\\icons\\" + icon_name + ".png"))
             img_size = icons_specs[icon_name].size
             img_ratio = img_size[0]/img_size[1]
 
@@ -43,25 +40,55 @@ def init():
                 dark_image=icons_specs[icon_name],
                 size=(25*img_ratio, 25),
             )
-
         except Exception as e:
             pass
 
     label_counter = 0
+    combobox_counter = 0
 
-    guest_fields = {
-        "guest_name": None,
-        "guest_birth": None,
-        "guest_citizenship": None,
-        "guest_passport": None,
-        "guest_address": None,
-        "guest_phone": None,
-        "guest_occupation": None,
-        "guest_purpose": None,
-        "guest_arrival": None,
-        "guest_departure": None,
-        "guest_relationship": None,
-        "guest_canadian_address": None,
+    guest1_fields = {
+        "guest1_name": None,
+        "guest1_birth": None,
+        "guest1_citizenship": None,
+        "guest1_passport": None,
+        "guest1_address": None,
+        "guest1_phone": None,
+        "guest1_occupation": None,
+        "guest1_purpose": None,
+        "guest1_arrival": None,
+        "guest1_departure": None,
+        "guest1_relationship_to_host1": None,
+        "guest1_canadian_address": None,
+    }
+
+    guest2_fields = {
+        "guest2_name": None,
+        "guest2_birth": None,
+        "guest2_citizenship": None,
+        "guest2_passport": None,
+        "guest2_address": None,
+        "guest2_phone": None,
+        "guest2_occupation": None,
+        "guest2_purpose": None,
+        "guest2_arrival": None,
+        "guest2_departure": None,
+        "guest2_relationship_to_host1": None,
+        "guest2_canadian_address": None,
+    }
+
+    guest3_fields = {
+        "guest3_name": None,
+        "guest3_birth": None,
+        "guest3_citizenship": None,
+        "guest3_passport": None,
+        "guest3_address": None,
+        "guest3_phone": None,
+        "guest3_occupation": None,
+        "guest3_purpose": None,
+        "guest3_arrival": None,
+        "guest3_departure": None,
+        "guest3_relationship_to_host1": None,
+        "guest3_canadian_address": None,
     }
 
     host1_fields = {
@@ -86,5 +113,10 @@ def init():
         "host2_occupation": None,
         "host2_email": None,
         "host2_relation_to_host1": None,
+    }
+
+    exp_docs_fields = {
+        "bearer_of_expenses": None,
+        "attached_documents": None,
     }
 

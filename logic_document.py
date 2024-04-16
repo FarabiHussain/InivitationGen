@@ -29,6 +29,8 @@ def init():
     input_file = resource_path("assets\\templates\\double.docx")
     output_file = f"{vars.guest_fields['guest_name'].get()}_{(datetime.datetime.now().timestamp())}.docx"
 
+    form_data['[GUEST_INFO]'] = f"{vars.guest_fields['guest_name'].get()}, born {vars.guest_fields['guest_birth'].get()}, Passport Number {vars.guest_fields['guest_passport'].get()}"
+
     form_data['[HOST1_NAME]'] = vars.host1_fields['host1_name'].get()
     form_data['[HOST1_BIRTH]'] = vars.host1_fields['host1_birth'].get()
     form_data['[HOST1_STATUS]'] = vars.host1_fields['host1_status'].get()
@@ -59,8 +61,11 @@ def init():
     form_data['[GUEST_PURPOSE]'] = vars.guest_fields['guest_purpose'].get()
     form_data['[GUEST_ARRIVAL]'] = vars.guest_fields['guest_arrival'].get()
     form_data['[GUEST_DEPARTURE]'] = vars.guest_fields['guest_departure'].get()
-    form_data['[GUEST_RELATIONSHIP]'] = vars.guest_fields['guest_relationship'].get()
+    form_data['[GUEST_RELATIONSHIP]'] = vars.guest_fields['guest_relationship_to_host1'].get()
     form_data['[GUEST_CANADIAN_ADDRESS]'] = vars.guest_fields['guest_canadian_address'].get()
+
+    form_data['[BEARER]'] = vars.exp_docs_fields['bearer_of_expenses'].get()
+    form_data['[ATTACHED]'] = vars.exp_docs_fields['attached_documents'].get()
 
     return {
         'form_data': form_data, 
@@ -98,7 +103,7 @@ def generate_doc():
     # add the table containing host1's details
     insert_table(
         document=doc, 
-        table_heading="\nMy details are as follows.",
+        table_heading="\nMy details are as follows.", 
         table_items=[
             {"label": "Full Name", "info": vars.host1_fields['host1_name'].get()},
             {"label": "Date of Birth", "info": vars.host1_fields['host1_birth'].get()},
@@ -114,7 +119,7 @@ def generate_doc():
     # add the table containing host2's details
     insert_table(
         document=doc, 
-        table_heading=f"\n\nMy {vars.host1_fields['host1_relation_to_host2'].get()}'s details as follows.",
+        table_heading=f"\n\nMy {vars.host1_fields['host1_relation_to_host2'].get()}'s details are as follows.", 
         table_items=[
             {"label": "Full Name", "info": vars.host2_fields['host2_name'].get()},
             {"label": "Date of Birth", "info": vars.host2_fields['host2_birth'].get()},
@@ -132,14 +137,14 @@ def generate_doc():
     # add the table containing guest's details
     insert_table(
         document=doc, 
-        table_heading="The details of the invitee are as follows.",
+        table_heading="The details of the invitee are as follows.", 
         table_items=[
             {"label": "Full Name", "info": vars.guest_fields['guest_name'].get()},
             {"label": "Date of Birth", "info": vars.guest_fields['guest_birth'].get()},
             {"label": "Residential Address", "info": vars.guest_fields['guest_address'].get()},
             {"label": "Phone Number", "info": vars.guest_fields['guest_phone'].get()},
             {"label": "Current Occupation", "info": vars.guest_fields['guest_occupation'].get()},
-            {"label": "Relationship to Inviter", "info": vars.guest_fields['guest_relationship'].get()},
+            {"label": "Relationship to Inviter", "info": vars.guest_fields['guest_relationship_to_host1'].get()},
             {"label": "Purpose of Visit", "info": vars.guest_fields['guest_purpose'].get()},
             {"label": "Arrival Date", "info": vars.guest_fields['guest_arrival'].get()},
             {"label": "Departure Date", "info": vars.guest_fields['guest_departure'].get()},
@@ -147,12 +152,13 @@ def generate_doc():
         ]
     )
 
+    #
     insert_paragraph(
         paragraph=doc.add_paragraph(),
         text=(
             f"\nThe airfare, travel expenses, would be borne by {vars.guest_fields['guest_name'].get()}. " +
-            f"All expenses in connection with {vars.guest_fields['guest_name'].get()}’s visit to Canada will be [BEARER]. " +
-            f"Attached with the application are [ATTACHED]." +
+            f"All expenses in connection with {vars.guest_fields['guest_name'].get()}’s visit to Canada will be {vars.exp_docs_fields['bearer_of_expenses'].get()}. " +
+            f"Attached with the application are {vars.exp_docs_fields['attached_documents'].get()}." +
             f"\n\nIf any clarification or information is required, please do not hesitate to contact us at our email addresses and phone numbers below."
         )
     )
@@ -162,11 +168,18 @@ def generate_doc():
         document=doc, 
         table_heading="\n\n\n\n",
         table_items=[
-            {"label": "_______________________________", "info": "_______________________________"},
+            {"label": "_________________________________", "info": "_________________________________"},
             {"label": vars.host1_fields['host1_name'].get(), "info": vars.host2_fields['host2_name'].get()},
             {"label": vars.host1_fields['host1_email'].get(), "info": vars.host2_fields['host2_email'].get()},
             {"label": vars.host1_fields['host1_phone'].get(), "info": vars.host2_fields['host2_phone'].get()},
-        ]
+        ],
+        table_props={
+            'color': '#ffffff',
+            "cell_alignment": [
+                WD_ALIGN_PARAGRAPH.LEFT, 
+                WD_ALIGN_PARAGRAPH.LEFT
+            ]
+        }
     )
 
     # create the output file
@@ -195,10 +208,19 @@ def save_doc(doc, init_data):
 
 
 # insert table with the passed data
-def insert_table(document, table_heading=None, table_items=[], table_props={}):
+def insert_table(document, table_heading=None, table_items=[], table_props=None):
     style = document.styles['Normal']
     font = style.font
     font.name = 'Times New Roman'
+
+    if table_props is None:
+        table_props = {
+            "color": "#AAAAAA",
+            "cell_alignment": [
+                WD_ALIGN_PARAGRAPH.LEFT, 
+                WD_ALIGN_PARAGRAPH.RIGHT
+            ]
+        }
 
     # add the table heading
     try:
@@ -223,16 +245,16 @@ def insert_table(document, table_heading=None, table_items=[], table_props={}):
             curr_row = row.cells
             row.height = CM(0.50)
             curr_row[0].text = table_items[idx]['label']
-            curr_row[0].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
+            curr_row[0].paragraphs[0].alignment = table_props['cell_alignment'][0]
             curr_row[1].text = table_items[idx]['info']
-            curr_row[1].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            curr_row[1].paragraphs[0].alignment = table_props['cell_alignment'][1]
 
         # set column widths and borders
         for idx, _ in enumerate(table_items[0]):
             for cell in (table_obj.columns[idx].cells):
-                cell.width = CM(10)
-                set_cell_border(cell, top={"sz": 1, "color": "#AAAAAA", "val": "single", "space": "4"})
-                set_cell_border(cell, bottom={"sz": 1, "color": "#AAAAAA", "val": "single", "space": "0"})
+                cell.width = CM(20)
+                set_cell_border(cell, top={"sz": 1, "color": table_props['color'], "val": "single", "space": "4"})
+                set_cell_border(cell, bottom={"sz": 1, "color": table_props['color'], "val": "single", "space": "0"})
     except Exception as e:
         popup(title="", message=f'Exception when adding table contents\n\n{e}', corner_radius=4)
         return False
