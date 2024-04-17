@@ -8,9 +8,9 @@ from icecream import ic
 
 # reset all input fields and delete all receipt items
 def clear_fields():
-    # for current_dict in [vars.guest_fields, vars.host1_fields, vars.host2_fields]:
-    #     for elem in current_dict.keys():
-    #         current_dict[elem].reset()
+    for current_dict in [vars.guest_fields, vars.host_fields, vars.finances_fields]:
+        for elem in current_dict.keys():
+            current_dict[elem].reset()
     return
 
 
@@ -18,48 +18,39 @@ def clear_fields():
 def testfill_fields():
     host1_gender = random.choice(['male', 'female'])
     host2_gender = 'male' if host1_gender == 'female' else 'female'
-    host1_name = names.get_full_name(gender=host1_gender)
-    host2_name = names.get_full_name(gender=host2_gender)
-    guest1_name = names.get_full_name(gender=random.choice(['male', 'female']))
-    guest2_name = names.get_full_name(gender=random.choice(['male', 'female']))
-    guest3_name = names.get_full_name(gender=random.choice(['male', 'female']))
+    host_names = [names.get_full_name(gender=host1_gender), names.get_full_name(gender=host2_gender)]
+    guest_names = [
+        names.get_full_name(gender=random.choice(['male', 'female'])),
+        names.get_full_name(gender=random.choice(['male', 'female'])),
+        names.get_full_name(gender=random.choice(['male', 'female'])),
+    ]
 
-    for guest_idx in range(3):
-        current_fields = vars[f'guest{guest_idx}_field']
-        ic(current_fields)
+    for idx in range(3):
+        vars.guest_fields[f"guest{idx+1}_entry_name"].set(guest_names[idx])
+        vars.guest_fields[f"guest{idx+1}_entry_birth"].set("January 1, 1994")
+        vars.guest_fields[f"guest{idx+1}_entry_citizenship"].set("United Kingdom")
+        vars.guest_fields[f"guest{idx+1}_entry_passport"].set(f"{str(random.randint(1000000, 9999999))}")
+        vars.guest_fields[f"guest{idx+1}_entry_address"].set("100 Some Place, City, Country")
+        vars.guest_fields[f"guest{idx+1}_entry_phone"].set(f"{random.choice(["431", "204"])}{str(random.randint(1000000, 9999999))}")
+        vars.guest_fields[f"guest{idx+1}_entry_occupation"].set("Student")
+        vars.guest_fields[f"guest{idx+1}_entry_purpose"].set("Visit")
+        vars.guest_fields[f"guest{idx+1}_entry_arrival"].set("April 15, 2024")
+        vars.guest_fields[f"guest{idx+1}_entry_departure"].set("April 30, 2024")
+        vars.guest_fields[f"guest{idx+1}_entry_relationship_to_host1"].set("sibling")
+        vars.guest_fields[f"guest{idx+1}_entry_canadian_address"].set("100 Random Street, Winnipeg, MB")
 
-    vars.guest1_fields["guest_name"].set(guest1_name)
-    vars.guest1_fields["guest_birth"].set("January 1, 1994")
-    vars.guest1_fields["guest_citizenship"].set("United Kingdom")
-    vars.guest1_fields["guest_passport"].set("XXXXXXXXX")
-    vars.guest1_fields["guest_address"].set("100 Some Place, City, Country")
-    vars.guest1_fields["guest_phone"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
-    vars.guest1_fields["guest_occupation"].set("Student")
-    vars.guest1_fields["guest_purpose"].set("Visit")
-    vars.guest1_fields["guest_arrival"].set("April 15, 2024")
-    vars.guest1_fields["guest_departure"].set("April 30, 2024")
-    vars.guest1_fields["guest_relationship_to_host1"].set("brother")
-    vars.guest1_fields["guest_canadian_address"].set("100 Random Street, Winnipeg, MB")
+    for idx in range(2):
+        vars.host_fields[f"host{idx+1}_entry_name"].set(host_names[idx])
+        vars.host_fields[f"host{idx+1}_entry_birth"].set("January 1, 1990")
+        vars.host_fields[f"host{idx+1}_entry_status"].set("Citizen")
+        vars.host_fields[f"host{idx+1}_entry_passport"].set("YYYYYYYYY")
+        vars.host_fields[f"host{idx+1}_entry_address"].set("100 Random Street, Winnipeg, MB")
+        vars.host_fields[f"host{idx+1}_entry_email"].set(host_names[idx].replace(" ", "").lower() + "@email.com")
+        vars.host_fields[f"host{idx+1}_entry_occupation"].set("Project Manager")
+        vars.host_fields[f"host{idx+1}_entry_phone"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
+        vars.host_fields[f"host{1 if idx == 0 else 2}_entry_relation_to_host{2 if idx == 0 else 1}"].set("spouse")
 
-    vars.host1_fields["host1_name"].set(host1_name)
-    vars.host1_fields["host1_birth"].set("January 1st, 1990")
-    vars.host1_fields["host1_status"].set("Citizen")
-    vars.host1_fields["host1_passport"].set("YYYYYYYYY")
-    vars.host1_fields["host1_address"].set("100 Random Street, Winnipeg, MB")
-    vars.host1_fields["host1_email"].set(host1_name.replace(" ", "").lower() + "@email.com")
-    vars.host1_fields["host1_occupation"].set("Project Manager")
-    vars.host1_fields["host1_phone"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
-    vars.host1_fields["host1_relation_to_host2"].set("wife")
-
-    vars.host2_fields["host2_name"].set(host2_name)
-    vars.host2_fields["host2_birth"].set("December 31, 1992")
-    vars.host2_fields["host2_status"].set("Citizen")
-    vars.host2_fields["host2_passport"].set("ZZZZZZZZZ")
-    vars.host2_fields["host2_address"].set("100 Random Street, Winnipeg, MB")
-    vars.host2_fields["host2_email"].set(host1_name.replace(" ", "").lower() + "@email.com")
-    vars.host2_fields["host2_occupation"].set("Health Care Worker")
-    vars.host2_fields["host2_phone"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
-    vars.host2_fields["host2_relation_to_host1"].set("husband")
+    return
 
 
 # perform a check for the presence of special characters

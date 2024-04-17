@@ -7,7 +7,7 @@ from path_manager import resource_path
 ## initalize the variables to be used throughout the app
 def init():
     global screen_sizes, form, root, popups, cwd, icons, font_family, label_counter, combobox_counter
-    global guest1_fields, guest2_fields, guest3_fields, host1_fields, host2_fields, exp_docs_fields
+    global guest_fields, host_fields, finances_fields
 
     cwd = os.getcwd()
 
@@ -46,77 +46,39 @@ def init():
     label_counter = 0
     combobox_counter = 0
 
-    guest1_fields = {
-        "guest1_name": None,
-        "guest1_birth": None,
-        "guest1_citizenship": None,
-        "guest1_passport": None,
-        "guest1_address": None,
-        "guest1_phone": None,
-        "guest1_occupation": None,
-        "guest1_purpose": None,
-        "guest1_arrival": None,
-        "guest1_departure": None,
-        "guest1_relationship_to_host1": None,
-        "guest1_canadian_address": None,
+    guest_fields = {}
+
+    for idx in range(3):
+        guest_fields[f'guest{idx+1}_entry_name'] = None
+        guest_fields[f'guest{idx+1}_entry_birth'] = None
+        guest_fields[f'guest{idx+1}_entry_citizenship'] = None
+        guest_fields[f'guest{idx+1}_entry_passport'] = None
+        guest_fields[f'guest{idx+1}_entry_address'] = None
+        guest_fields[f'guest{idx+1}_entry_phone'] = None
+        guest_fields[f'guest{idx+1}_entry_occupation'] = None
+        guest_fields[f'guest{idx+1}_entry_purpose'] = None
+        guest_fields[f'guest{idx+1}_entry_arrival'] = None
+        guest_fields[f'guest{idx+1}_entry_departure'] = None
+        guest_fields[f'guest{idx+1}_entry_relationship_to_host1'] = None
+        guest_fields[f'guest{idx+1}_entry_canadian_address'] = None
+
+    host_fields = {
+        "host1_entry_relation_to_host2": None,
+        "host2_entry_relation_to_host1": None,
     }
 
-    guest2_fields = {
-        "guest2_name": None,
-        "guest2_birth": None,
-        "guest2_citizenship": None,
-        "guest2_passport": None,
-        "guest2_address": None,
-        "guest2_phone": None,
-        "guest2_occupation": None,
-        "guest2_purpose": None,
-        "guest2_arrival": None,
-        "guest2_departure": None,
-        "guest2_relationship_to_host1": None,
-        "guest2_canadian_address": None,
-    }
+    for idx in range(2):
+        host_fields[f'host{idx+1}_entry_name'] = None
+        host_fields[f'host{idx+1}_entry_birth'] = None
+        host_fields[f'host{idx+1}_entry_status'] = None
+        host_fields[f'host{idx+1}_entry_passport'] = None
+        host_fields[f'host{idx+1}_entry_address'] = None
+        host_fields[f'host{idx+1}_entry_phone'] = None
+        host_fields[f'host{idx+1}_entry_occupation'] = None
+        host_fields[f'host{idx+1}_entry_email'] = None
 
-    guest3_fields = {
-        "guest3_name": None,
-        "guest3_birth": None,
-        "guest3_citizenship": None,
-        "guest3_passport": None,
-        "guest3_address": None,
-        "guest3_phone": None,
-        "guest3_occupation": None,
-        "guest3_purpose": None,
-        "guest3_arrival": None,
-        "guest3_departure": None,
-        "guest3_relationship_to_host1": None,
-        "guest3_canadian_address": None,
-    }
-
-    host1_fields = {
-        "host1_name": None,
-        "host1_birth": None,
-        "host1_status": None,
-        "host1_passport": None,
-        "host1_address": None,
-        "host1_phone": None,
-        "host1_occupation": None,
-        "host1_email": None,
-        "host1_relation_to_host2": None,
-    }
-
-    host2_fields = {
-        "host2_name": None,
-        "host2_birth": None,
-        "host2_status": None,
-        "host2_passport": None,
-        "host2_address": None,
-        "host2_phone": None,
-        "host2_occupation": None,
-        "host2_email": None,
-        "host2_relation_to_host1": None,
-    }
-
-    exp_docs_fields = {
-        "bearer_of_expenses": None,
-        "attached_documents": None,
+    finances_fields = {
+        "finances_combo_bearer_of_expenses": None,
+        "finances_entry_attached_documents": None,
     }
 

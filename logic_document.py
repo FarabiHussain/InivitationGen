@@ -29,17 +29,23 @@ def init():
     input_file = resource_path("assets\\templates\\double.docx")
     output_file = f"{vars.guest_fields['guest_name'].get()}_{(datetime.datetime.now().timestamp())}.docx"
 
-    form_data['[GUEST_INFO]'] = f"{vars.guest_fields['guest_name'].get()}, born {vars.guest_fields['guest_birth'].get()}, Passport Number {vars.guest_fields['guest_passport'].get()}"
+    form_data['[GUEST_INFO]'] = f"{vars.guest_fields['guest1_entry_name'].get()}, born {vars.guest_fields['guest1_entry_birth'].get()}, Passport Number {vars.guest_fields['guest1_entry_passport'].get()}"
 
-    form_data['[HOST1_NAME]'] = vars.host1_fields['host1_name'].get()
-    form_data['[HOST1_BIRTH]'] = vars.host1_fields['host1_birth'].get()
-    form_data['[HOST1_STATUS]'] = vars.host1_fields['host1_status'].get()
-    form_data['[HOST1_PASSPORT]'] = vars.host1_fields['host1_passport'].get()
-    form_data['[HOST1_ADDRESS]'] = vars.host1_fields['host1_address'].get()
-    form_data['[HOST1_PHONE]'] = vars.host1_fields['host1_phone'].get()
-    form_data['[HOST1_OCCUPATION]'] = vars.host1_fields['host1_occupation'].get()
-    form_data['[HOST1_EMAIL]'] = vars.host1_fields['host1_email'].get()
-    form_data['[HOST1_RELATION_TO_HOST2]'] = vars.host1_fields['host1_relation_to_host2'].get()
+    if len(vars.guest_fields['guest2_entry_name'].get()) > 0:
+        form_data['[GUEST_INFO]'] += f"{vars.guest_fields['guest2_entry_name'].get()}, born {vars.guest_fields['guest2_entry_birth'].get()}, Passport Number {vars.guest_fields['guest2_entry_passport'].get()}"
+    if len(vars.guest_fields['guest3_entry_name'].get()) > 0:
+        form_data['[GUEST_INFO]'] += f"{vars.guest_fields['guest3_entry_name'].get()}, born {vars.guest_fields['guest3_entry_birth'].get()}, Passport Number {vars.guest_fields['guest3_entry_passport'].get()}"
+
+    for idx in range(3):
+        form_data[f'[HOST{idx+1}_NAME]'] = vars.host1_fields['host1_name'].get()
+        form_data[f'[HOST{idx+1}_BIRTH]'] = vars.host1_fields['host1_birth'].get()
+        form_data[f'[HOST{idx+1}_STATUS]'] = vars.host1_fields['host1_status'].get()
+        form_data[f'[HOST{idx+1}_PASSPORT]'] = vars.host1_fields['host1_passport'].get()
+        form_data[f'[HOST{idx+1}_ADDRESS]'] = vars.host1_fields['host1_address'].get()
+        form_data[f'[HOST{idx+1}_PHONE]'] = vars.host1_fields['host1_phone'].get()
+        form_data[f'[HOST{idx+1}_OCCUPATION]'] = vars.host1_fields['host1_occupation'].get()
+        form_data[f'[HOST{idx+1}_EMAIL]'] = vars.host1_fields['host1_email'].get()
+        form_data[f'[HOST{idx+1}_RELATION_TO_HOST2]'] = vars.host1_fields['host1_relation_to_host2'].get()
 
     form_data['[HOST2_NAME]'] = vars.host2_fields['host2_name'].get()
     form_data['[HOST2_BIRTH]'] = vars.host2_fields['host2_birth'].get()
@@ -64,8 +70,8 @@ def init():
     form_data['[GUEST_RELATIONSHIP]'] = vars.guest_fields['guest_relationship_to_host1'].get()
     form_data['[GUEST_CANADIAN_ADDRESS]'] = vars.guest_fields['guest_canadian_address'].get()
 
-    form_data['[BEARER]'] = vars.exp_docs_fields['bearer_of_expenses'].get()
-    form_data['[ATTACHED]'] = vars.exp_docs_fields['attached_documents'].get()
+    form_data['[BEARER]'] = vars.finances_fields['bearer_of_expenses'].get()
+    form_data['[ATTACHED]'] = vars.finances_fields['attached_documents'].get()
 
     return {
         'form_data': form_data, 
@@ -157,8 +163,8 @@ def generate_doc():
         paragraph=doc.add_paragraph(),
         text=(
             f"\nThe airfare, travel expenses, would be borne by {vars.guest_fields['guest_name'].get()}. " +
-            f"All expenses in connection with {vars.guest_fields['guest_name'].get()}’s visit to Canada will be {vars.exp_docs_fields['bearer_of_expenses'].get()}. " +
-            f"Attached with the application are {vars.exp_docs_fields['attached_documents'].get()}." +
+            f"All expenses in connection with {vars.guest_fields['guest_name'].get()}’s visit to Canada will be {vars.finances_fields['bearer_of_expenses'].get()}. " +
+            f"Attached with the application are {vars.finances_fields['attached_documents'].get()}." +
             f"\n\nIf any clarification or information is required, please do not hesitate to contact us at our email addresses and phone numbers below."
         )
     )

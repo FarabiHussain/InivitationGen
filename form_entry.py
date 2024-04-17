@@ -17,10 +17,8 @@ class FormEntry:
         self.textV_name = f"{prefix}_textVariable"
         self.input_name = f"{prefix}_input"
 
-        for repl in ["guest1 ", "guest2 ", "guest3 ", "host1 ", "host2 "]:
-            short_label = (label_text).replace(repl, "")
-
-        short_label = short_label.capitalize()
+        short_label = label_text.replace("guest1 ", "").replace("guest2 ", "").replace("guest3 ", "").replace("host1 ", "").replace("host2 ", "").replace("finances ", "")
+        short_label = short_label.replace( "entry ", "").replace("combo ", "")
 
         ctk.CTkLabel(
             master, text=short_label, font=vars.font_family

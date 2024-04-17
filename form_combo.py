@@ -17,14 +17,14 @@ class FormCombo:
         self.textV_name = f"{prefix}_textVariable"
         self.input_name = f"{prefix}_input"
 
-        short_label = label_text.replace("guest ", "").replace("host1 ", "").replace("host2 ", "")
-        short_label = short_label.capitalize()
+        short_label = label_text.replace("guest1 ", "").replace("guest2 ", "").replace("guest3 ", "").replace("host1 ", "").replace("host2 ", "").replace("finances ", "")
+        short_label = short_label.replace( "entry ", "").replace("combo ", "")
 
         ctk.CTkLabel(
             master, text=short_label, font=vars.font_family
         ).place(x=left_offset + 10, y=top_offset + 10)
 
-        vars.form[self.textV_name] = StringVar(value="no options added" if options is None else options[0])
+        vars.form[self.textV_name] = StringVar(value="no options added" if options is None else 'click to choose')
 
         vars.form[self.input_name] = ctk.CTkComboBox(
             master,
@@ -53,5 +53,5 @@ class FormCombo:
     def reset(self) -> None:
         """reset the entry's data"""
         textvar = vars.form[self.textV_name]
-        textvar.set("")
+        textvar.set("click to choose")
 

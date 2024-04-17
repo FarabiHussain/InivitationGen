@@ -52,7 +52,7 @@ container = Tabview(
         "Guest 3", 
         "Host 1", 
         "Host 2", 
-        "Expenses and Documents"
+        "Finances"
     ]
 )
 
@@ -72,57 +72,58 @@ vars.form['host1_frame'] = ctk.CTkFrame(container_tabs['Host 1'], corner_radius=
 vars.form['host1_frame'].pack(expand=True, fill="both", padx=10, pady=10)
 vars.form['host2_frame'] = ctk.CTkFrame(container_tabs['Host 2'], corner_radius=4, fg_color='#ffffff')
 vars.form['host2_frame'].pack(expand=True, fill="both", padx=10, pady=10)
-vars.form['exp_docs_frame'] = ctk.CTkFrame(container_tabs['Expenses and Documents'], corner_radius=4, fg_color='#ffffff')
-vars.form['exp_docs_frame'].pack(expand=True, fill="both", padx=10, pady=10)
+vars.form['finances_frame'] = ctk.CTkFrame(container_tabs['Finances'], corner_radius=4, fg_color='#ffffff')
+vars.form['finances_frame'].pack(expand=True, fill="both", padx=10, pady=10)
 
 ##############################################################################################
 ## INPUT SECTION
 ##############################################################################################
 
 field_dicts = [
-    vars.guest1_fields, 
-    vars.guest2_fields, 
-    vars.guest3_fields, 
-    vars.host1_fields, 
-    vars.host2_fields, 
-    vars.exp_docs_fields
+    vars.guest_fields, 
+    vars.host_fields, 
+    vars.finances_fields
 ]
 
-field_frames = [
-    'guest1_frame', 
-    'guest2_frame', 
-    'guest3_frame', 
-    'host1_frame', 
-    'host2_frame', 
-    'exp_docs_frame'
-]
+for current_dict in field_dicts:
+    offset = 0
 
-comboboxes = ['bearer_of_expenses']
+    for field_idx, field in enumerate(current_dict.keys()):
 
-for current_dict, current_frame in zip(field_dicts, field_frames):
-    for index, field in enumerate(current_dict.keys()):
-
+        # keep track of these for component names and positions
         entry_label = field.replace("_", " ")
+        prev_frame = f"{list(current_dict.keys())[field_idx-1].split("_")[0]}_frame"
+        curr_frame = f'{field.split("_")[0]}_frame'
 
-        if field in comboboxes:
+        # reset the offset from top when a new frame is reached
+        is_new_frame = prev_frame != curr_frame
+        if is_new_frame:
+            offset = 0
+
+        # display the right component
+        if '_combo_' in field:
             current_dict[field] = FormCombo(
-                master=vars.form[current_frame], 
+                master=vars.form[curr_frame], 
                 label_text=entry_label, 
                 options=[
                     "paid for by me and will be my responsibility.", 
                     "their own responsibility and will be paid for by themselves. I will provide additional support if any assistance is needed."
                 ], 
                 left_offset=5, 
-                top_offset=40*index
+                top_offset=40*offset
             )
 
-        else:
+        elif '_entry_' in field:
             current_dict[field] = FormEntry(
-                master=vars.form[current_frame], 
+                master=vars.form[curr_frame], 
                 label_text=entry_label, 
                 left_offset=5, 
-                top_offset=40*index
+                top_offset=40*offset
             )
+
+        offset += 1
+
+
 
 ##############################################################################################
 ## BUTTONS
