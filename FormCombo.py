@@ -5,12 +5,11 @@ from tkinter import StringVar
 
 class FormCombo:
     def __init__(self, master=None, label_text="", options=None, left_offset=0, top_offset=0) -> None:
-        """create a new label and combobox"""
 
         # no label text was passed
         if label_text == "":
-            label_text = f"FormCombo{vars.combobox_counter}"
-            vars.combobox_counter += 1
+            label_text = f"FormCombo{vars.generic_counter}"
+            vars.generic_counter += 1
 
         # name the variables based on label text
         prefix = label_text.replace(" ", "_").lower()

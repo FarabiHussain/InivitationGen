@@ -16,8 +16,8 @@ def clear_fields():
 
 #
 def testfill_fields():
-    host1_gender = random.choice(['male', 'female'])
-    host2_gender = 'male' if host1_gender == 'female' else 'female'
+    host1_gender = 'male'
+    host2_gender = 'female'
     host_names = [names.get_full_name(gender=host1_gender), names.get_full_name(gender=host2_gender)]
     guest_names = [
         names.get_full_name(gender=random.choice(['male', 'female'])),
@@ -36,7 +36,9 @@ def testfill_fields():
         vars.guest_fields[f"guest{idx+1}_entry_purpose"].set("Visit")
         vars.guest_fields[f"guest{idx+1}_entry_arrival"].set("April 15, 2024")
         vars.guest_fields[f"guest{idx+1}_entry_departure"].set("April 30, 2024")
-        vars.guest_fields[f"guest{idx+1}_entry_relationship_to_host1"].set("sibling")
+        vars.guest_fields[f"guest{idx+1}_entry_relationship_to_host1"].set("Sibling")
+        
+        # if (idx == 0 or idx == 1):
         vars.guest_fields[f"guest{idx+1}_entry_canadian_address"].set("100 Random Street, Winnipeg, MB")
 
     for idx in range(2):
@@ -48,7 +50,7 @@ def testfill_fields():
         vars.host_fields[f"host{idx+1}_entry_email"].set(host_names[idx].replace(" ", "").lower() + "@email.com")
         vars.host_fields[f"host{idx+1}_entry_occupation"].set("Project Manager")
         vars.host_fields[f"host{idx+1}_entry_phone"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
-        vars.host_fields[f"host{1 if idx == 0 else 2}_entry_relation_to_host{2 if idx == 0 else 1}"].set("spouse")
+        vars.host_fields[f"host{1 if idx == 0 else 2}_entry_relation_to_host{2 if idx == 0 else 1}"].set("Husband" if idx == 0 else "Wife" )
 
     return
 

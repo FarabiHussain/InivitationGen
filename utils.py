@@ -38,6 +38,22 @@ def format_phone(number):
 
 
 ##
+def format_collective_names(enitity_list):
+    temp = ""
+
+    if len(enitity_list) == 1:
+        temp = enitity_list[0].get('name')
+    elif len(enitity_list) == 2:
+        temp = f"{enitity_list[0].get('name')} and {enitity_list[1].get('name')}"
+    elif len(enitity_list) == 3:
+        temp = f"{enitity_list[0].get('name')}, {enitity_list[1].get('name')}, and {enitity_list[2].get('name')}"
+    else:
+        print(len(enitity_list))
+
+    return temp
+
+
+##
 def set_cell_color(cell, color="ffffff"):
     cell_xml = cell._tc
     cell_props = cell_xml.get_or_add_tcPr()

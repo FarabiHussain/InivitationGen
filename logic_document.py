@@ -9,12 +9,13 @@ from path_manager import resource_path
 from utils import *
 from icecream import ic
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from Entity import *
 
 
 ## initializes the fill info, output and input files
-def init():
-    # date_on_document = datetime.datetime.strptime(vars.form['document_date'], '%d/%m/%Y')
+def process_data():
     date_on_document = datetime.datetime.now()
+    initialize_entities()
 
     form_data = {
         '[DAY]': format_day(date_on_document.strftime("%d")),
@@ -22,82 +23,113 @@ def init():
         '[YEAR]': date_on_document.strftime("%Y"),
     }
 
-    # include client 2 if the name is filled
-    # TO-DO
-
     # set the input and output files
     input_file = resource_path("assets\\templates\\double.docx")
     output_file = f"{(datetime.datetime.now().timestamp())}.docx"
 
-    form_data['[GUEST_INFO]'] = f"{vars.guest_fields['guest1_entry_name'].get()}, born {vars.guest_fields['guest1_entry_birth'].get()}, Passport Number {vars.guest_fields['guest1_entry_passport'].get()}"
+    form_data['[GUEST_INFO]'] = ""
+    form_data['[GUEST_NAMES]'] = format_collective_names(guests_list)
 
-    if len(vars.guest_fields['guest2_entry_name'].get()) > 0:
-        form_data['[GUEST_INFO]'] += f"{vars.guest_fields['guest2_entry_name'].get()}, born {vars.guest_fields['guest2_entry_birth'].get()}, Passport Number {vars.guest_fields['guest2_entry_passport'].get()}"
-    if len(vars.guest_fields['guest3_entry_name'].get()) > 0:
-        form_data['[GUEST_INFO]'] += f"{vars.guest_fields['guest3_entry_name'].get()}, born {vars.guest_fields['guest3_entry_birth'].get()}, Passport Number {vars.guest_fields['guest3_entry_passport'].get()}"
+    for i in range(len(hosts_list)):
+        host = hosts_list[i]
 
-    for idx in range(3):
-        form_data[f'[HOST{idx+1}_NAME]'] = vars.host_fields['host1_entry_name'].get()
-        form_data[f'[HOST{idx+1}_BIRTH]'] = vars.host_fields['host1_entry_birth'].get()
-        form_data[f'[HOST{idx+1}_STATUS]'] = vars.host_fields['host1_entry_status'].get()
-        form_data[f'[HOST{idx+1}_PASSPORT]'] = vars.host_fields['host1_entry_passport'].get()
-        form_data[f'[HOST{idx+1}_ADDRESS]'] = vars.host_fields['host1_entry_address'].get()
-        form_data[f'[HOST{idx+1}_PHONE]'] = vars.host_fields['host1_entry_phone'].get()
-        form_data[f'[HOST{idx+1}_OCCUPATION]'] = vars.host_fields['host1_entry_occupation'].get()
-        form_data[f'[HOST{idx+1}_EMAIL]'] = vars.host_fields['host1_entry_email'].get()
-        form_data[f'[HOST{idx+1}_RELATION_TO_HOST2]'] = vars.host_fields['host1_entry_relation_to_host2'].get()
+        form_data[f'[HOST{i+1}_NAME]'] = host.get('name')
+        form_data[f'[HOST{i+1}_BIRTH]'] = host.get('birth')
+        form_data[f'[HOST{i+1}_STATUS]'] = host.get('status')
+        form_data[f'[HOST{i+1}_PASSPORT]'] = host.get('passport')
+        form_data[f'[HOST{i+1}_ADDRESS]'] = host.get('address')
+        form_data[f'[HOST{i+1}_PHONE]'] = host.get('phone')
+        form_data[f'[HOST{i+1}_OCCUPATION]'] = host.get('occupation')
+        form_data[f'[HOST{i+1}_EMAIL]'] = host.get('email')
+        form_data[f'[HOST{i+1}_RELATION_TO_HOST{"2" if (i+1)==1 else "1"}]'] = host.get('relation_to_other_host').lower()
 
-    form_data['[HOST2_NAME]'] = vars.host_fields['host2_entry_name'].get()
-    form_data['[HOST2_BIRTH]'] = vars.host_fields['host2_entry_birth'].get()
-    form_data['[HOST2_STATUS]'] = vars.host_fields['host2_entry_status'].get()
-    form_data['[HOST2_PASSPORT]'] = vars.host_fields['host2_entry_passport'].get()
-    form_data['[HOST2_ADDRESS]'] = vars.host_fields['host2_entry_address'].get()
-    form_data['[HOST2_PHONE]'] = vars.host_fields['host2_entry_phone'].get()
-    form_data['[HOST2_OCCUPATION]'] = vars.host_fields['host2_entry_occupation'].get()
-    form_data['[HOST2_EMAIL]'] = vars.host_fields['host2_entry_email'].get()
-    form_data['[HOST2_RELATION_TO_HOST1]'] = vars.host_fields['host2_entry_relation_to_host1'].get()
+    for i in range(len(guests_list)):
+        guest = guests_list[i]
 
-    form_data['[GUEST_NAME]'] = vars.guest_fields['guest1_entry_name'].get()
-    form_data['[GUEST_BIRTH]'] = vars.guest_fields['guest1_entry_birth'].get()
-    form_data['[GUEST_CITIZENSHIP]'] = vars.guest_fields['guest1_entry_citizenship'].get()
-    form_data['[GUEST_PASSPORT]'] = vars.guest_fields['guest1_entry_passport'].get()
-    form_data['[GUEST_ADDRESS]'] = vars.guest_fields['guest1_entry_address'].get()
-    form_data['[GUEST_PHONE]'] = vars.guest_fields['guest1_entry_phone'].get()
-    form_data['[GUEST_OCCUPATION]'] = vars.guest_fields['guest1_entry_occupation'].get()
-    form_data['[GUEST_PURPOSE]'] = vars.guest_fields['guest1_entry_purpose'].get()
-    form_data['[GUEST_ARRIVAL]'] = vars.guest_fields['guest1_entry_arrival'].get()
-    form_data['[GUEST_DEPARTURE]'] = vars.guest_fields['guest1_entry_departure'].get()
-    form_data['[GUEST_RELATIONSHIP]'] = vars.guest_fields['guest1_entry_relationship_to_host1'].get()
-    form_data['[GUEST_CANADIAN_ADDRESS]'] = vars.guest_fields['guest1_entry_canadian_address'].get()
+        form_data['[GUEST_INFO]'] += f"{"\n" if i > 0 else ""}{guest.get('name')}, born {guest.get('birth')}, Passport Number {guest.get('passport')}"
+        form_data[f'[GUEST{i+1}_BIRTH]'] = guest.get('birth')
+        form_data[f'[GUEST{i+1}_CITIZENSHIP]'] = guest.get('citizenship')
+        form_data[f'[GUEST{i+1}_PASSPORT]'] = guest.get('passport')
+        form_data[f'[GUEST{i+1}_ADDRESS]'] = guest.get('address')
+        form_data[f'[GUEST{i+1}_PHONE]'] = guest.get('phone')
+        form_data[f'[GUEST{i+1}_OCCUPATION]'] = guest.get('occupation')
+        form_data[f'[GUEST{i+1}_RELATIONSHIP]'] = guest.get('relationship_to_host1')
+        form_data[f'[GUEST{i+1}_CANADIAN_ADDRESS]'] = guest.get('canadian_address')
+        form_data[f'[GUEST_PURPOSE]'] = guest.get('purpose')
+        form_data[f'[GUEST_ARRIVAL]'] = guest.get('arrival')
+        form_data[f'[GUEST_DEPARTURE]'] = guest.get('departure')
 
-    form_data['[BEARER]'] = vars.finances_fields['finances_combo_bearer_of_expenses'].get()
-    form_data['[ATTACHED]'] = vars.finances_fields['finances_entry_attached_documents'].get()
+    # form_data['[BEARER]'] = vars.finances_fields['finances_combo_bearer_of_expenses'].get()
+    # form_data['[ATTACHED]'] = vars.finances_fields['finances_entry_attached_documents'].get()
 
-    return {
-        'form_data': form_data, 
-        'input_file': input_file, 
-        'output_file': output_file
-    }
+    return {'form_data': form_data, 'input_file': input_file, 'output_file': output_file}
 
 
-## generate the docx with the input info
+# create objects of hosts and guests
+def initialize_entities():
+    global guests_list
+    global hosts_list
+
+    guests_list = []
+    hosts_list = []
+
+    for i in range(1,4):
+
+        # append guests
+        guest=Guest({
+            'name': vars.guest_fields[f'guest{i}_entry_name'].get(),
+            'birth': vars.guest_fields[f'guest{i}_entry_birth'].get(),
+            'address': vars.guest_fields[f'guest{i}_entry_address'].get(),
+            'phone': vars.guest_fields[f'guest{i}_entry_phone'].get(),
+            'occupation': vars.guest_fields[f'guest{i}_entry_occupation'].get(),
+            'relationship_to_host1': vars.guest_fields[f'guest{i}_entry_relationship_to_host1'].get(),
+            'purpose': vars.guest_fields[f'guest{i}_entry_purpose'].get(),
+            'arrival': vars.guest_fields[f'guest{i}_entry_arrival'].get(),
+            'departure': vars.guest_fields[f'guest{i}_entry_departure'].get(),
+            'canadian_address': vars.guest_fields[f'guest{i}_entry_canadian_address'].get(),
+            'passport': vars.guest_fields[f'guest{i}_entry_passport'].get(),
+            'citizenship': vars.guest_fields[f'guest{i}_entry_citizenship'].get(),
+        })
+
+        if guest.is_filled():
+            guests_list.append(guest) 
+
+        # append hosts
+        if (i < 3):
+            host=Host({
+                'name': vars.host_fields[f'host{i}_entry_name'].get(),
+                'birth': vars.host_fields[f'host{i}_entry_birth'].get(),
+                'status': vars.host_fields[f'host{i}_entry_status'].get(),
+                'passport': vars.host_fields[f'host{i}_entry_passport'].get(),
+                'address': vars.host_fields[f'host{i}_entry_address'].get(),
+                'phone': vars.host_fields[f'host{i}_entry_phone'].get(),
+                'occupation': vars.host_fields[f'host{i}_entry_occupation'].get(),
+                'email': vars.host_fields[f'host{i}_entry_email'].get(),
+                'relation_to_other_host': vars.host_fields[f'host{"1" if i == 1 else "2"}_entry_relation_to_host{"2" if i == 1 else "1"}'].get(),
+            })
+
+            if host.is_filled():
+                hosts_list.append(host)
+
+
+# generate the docx with the input info
 def generate_doc():
-    init_data = None
+    data = None
     doc = None
 
     # initiate the data and document
     try:
-        init_data = init()
-        doc = Document(init_data['input_file'])
+        data = process_data()
+        doc = Document(data['input_file'])
     except Exception as e:
-        popup(title="", message='Exception in init(): ' + str(e), corner_radius=4)
+        popup(title="", message='Exception in process_data(): ' + str(e), corner_radius=4)
         return False
 
     # replace placeholders on the document
     try:
         current_replace = ""
         for paragraph in doc.paragraphs:
-            for key, value in init_data['form_data'].items():
+            for key, value in data['form_data'].items():
                 if key in paragraph.text:
                     for run in paragraph.runs:
                         current_replace = value
@@ -106,7 +138,7 @@ def generate_doc():
         popup(title="", message=f'Exception while editing document\n\nPlacing {current_replace}\n\n{e}', corner_radius=4)
         return False
 
-    #
+    # invitation letter intro
     insert_paragraph(
         paragraph=doc.add_paragraph(),
         text=(
@@ -115,7 +147,7 @@ def generate_doc():
         )
     )
 
-    # add the table containing hosts' details
+    # table containing hosts' details
     for index in range(1,3):
         insert_table(
             document=doc, 
@@ -132,36 +164,39 @@ def generate_doc():
             ]
         )
 
-    doc.add_page_break()
+    # table containing guests' details
+    for i in range(len(guests_list)):
+        
+        if i==0:
+            doc.add_page_break()
 
-    for index in range(1,4):
-        guest_name = vars.guest_fields[f'guest{index}_entry_name'].get()
+        guest = guests_list[i]
 
         # add the table containing guest's details
         insert_table(
             document=doc, 
-            table_heading=f"The details of {guest_name} are as follows,", 
+            table_heading=f"The details of {guest.get('name')} are as follows,", 
             table_items=[
-                {"label": "Full Name", "info": vars.guest_fields[f'guest{index}_entry_name'].get()},
-                {"label": "Date of Birth", "info": vars.guest_fields[f'guest{index}_entry_birth'].get()},
-                {"label": "Residential Address", "info": vars.guest_fields[f'guest{index}_entry_address'].get()},
-                {"label": "Phone Number", "info": vars.guest_fields[f'guest{index}_entry_phone'].get()},
-                {"label": "Current Occupation", "info": vars.guest_fields[f'guest{index}_entry_occupation'].get()},
-                {"label": "Relationship to Inviter", "info": vars.guest_fields[f'guest{index}_entry_relationship_to_host1'].get()},
-                {"label": "Purpose of Visit", "info": vars.guest_fields[f'guest{index}_entry_purpose'].get()},
-                {"label": "Arrival Date", "info": vars.guest_fields[f'guest{index}_entry_arrival'].get()},
-                {"label": "Departure Date", "info": vars.guest_fields[f'guest{index}_entry_departure'].get()},
-                {"label": "Primary Residence in Canada", "info": vars.guest_fields[f'guest{index}_entry_canadian_address'].get()},
+                {"label": "Full Name", "info": guest.get('name')},
+                {"label": "Date of Birth", "info": guest.get('birth')},
+                {"label": "Residential Address", "info": guest.get('address')},
+                {"label": "Phone Number", "info": guest.get('phone')},
+                {"label": "Current Occupation", "info": guest.get('occupation')},
+                {"label": "Relationship to Inviter", "info": guest.get('relationship_to_host1')},
+                {"label": "Purpose of Visit", "info": guest.get('purpose')},
+                {"label": "Arrival Date", "info": guest.get('arrival')},
+                {"label": "Departure Date", "info": guest.get('departure')},
+                {"label": "Primary Residence in Canada", "info": guest.get('canadian_address')},
             ]
         )
 
-        if index < 3:
+        if i < 3:
             insert_paragraph(
                 paragraph=doc.add_paragraph(),
                 text=("\n")
             )
 
-    #
+    # invitation letter outro
     insert_paragraph(
         paragraph=doc.add_paragraph(),
         text=(
@@ -172,7 +207,7 @@ def generate_doc():
         )
     )
 
-    # add the table containing guest's details
+    # table for hosts to sign
     insert_table(
         document=doc, 
         table_heading="\n\n\n\n",
@@ -192,11 +227,11 @@ def generate_doc():
     )
 
     # create the output file
-    save_doc(doc, init_data)
+    save_doc(doc, data)
 
 
 # set up folders and save files, print if needed
-def save_doc(doc, init_data):
+def save_doc(doc, data):
     try:
         # set up the output directory
         output_dir = os.getcwd() + "\\output\\"
@@ -204,13 +239,13 @@ def save_doc(doc, init_data):
             os.makedirs(output_dir)
 
         # save the file to the output folder
-        doc.save(output_dir + init_data['output_file'])
+        doc.save(output_dir + data['output_file'])
 
         # open the word file
-        os.startfile(output_dir + init_data['output_file'])
+        os.startfile(output_dir + data['output_file'])
 
         # return the filename
-        return init_data['output_file']
+        return data['output_file']
     except Exception as e:
         ic(e)
         popup(title="", message='Exception: ' + str(e), corner_radius=4)

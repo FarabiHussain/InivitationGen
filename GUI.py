@@ -5,11 +5,12 @@ from tkinter import StringVar
 
 class FormEntry:
     def __init__(self, master=None, label_text="", left_offset=0, top_offset=0) -> None:
+        """create a new GUI component"""
 
         # no label text was passed
         if label_text == "":
-            label_text = f"FormEntry{vars.generic_counter}"
-            vars.generic_counter += 1
+            label_text = f"FormEntry{vars.label_counter}"
+            vars.label_counter += 1
 
         # name the variables based on label text
         prefix = label_text.replace(" ", "_").lower()
