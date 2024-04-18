@@ -27,7 +27,7 @@ def init():
 
     # set the input and output files
     input_file = resource_path("assets\\templates\\double.docx")
-    output_file = f"{vars.guest_fields['guest_name'].get()}_{(datetime.datetime.now().timestamp())}.docx"
+    output_file = f"{(datetime.datetime.now().timestamp())}.docx"
 
     form_data['[GUEST_INFO]'] = f"{vars.guest_fields['guest1_entry_name'].get()}, born {vars.guest_fields['guest1_entry_birth'].get()}, Passport Number {vars.guest_fields['guest1_entry_passport'].get()}"
 
@@ -37,41 +37,41 @@ def init():
         form_data['[GUEST_INFO]'] += f"{vars.guest_fields['guest3_entry_name'].get()}, born {vars.guest_fields['guest3_entry_birth'].get()}, Passport Number {vars.guest_fields['guest3_entry_passport'].get()}"
 
     for idx in range(3):
-        form_data[f'[HOST{idx+1}_NAME]'] = vars.host1_fields['host1_name'].get()
-        form_data[f'[HOST{idx+1}_BIRTH]'] = vars.host1_fields['host1_birth'].get()
-        form_data[f'[HOST{idx+1}_STATUS]'] = vars.host1_fields['host1_status'].get()
-        form_data[f'[HOST{idx+1}_PASSPORT]'] = vars.host1_fields['host1_passport'].get()
-        form_data[f'[HOST{idx+1}_ADDRESS]'] = vars.host1_fields['host1_address'].get()
-        form_data[f'[HOST{idx+1}_PHONE]'] = vars.host1_fields['host1_phone'].get()
-        form_data[f'[HOST{idx+1}_OCCUPATION]'] = vars.host1_fields['host1_occupation'].get()
-        form_data[f'[HOST{idx+1}_EMAIL]'] = vars.host1_fields['host1_email'].get()
-        form_data[f'[HOST{idx+1}_RELATION_TO_HOST2]'] = vars.host1_fields['host1_relation_to_host2'].get()
+        form_data[f'[HOST{idx+1}_NAME]'] = vars.host_fields['host1_entry_name'].get()
+        form_data[f'[HOST{idx+1}_BIRTH]'] = vars.host_fields['host1_entry_birth'].get()
+        form_data[f'[HOST{idx+1}_STATUS]'] = vars.host_fields['host1_entry_status'].get()
+        form_data[f'[HOST{idx+1}_PASSPORT]'] = vars.host_fields['host1_entry_passport'].get()
+        form_data[f'[HOST{idx+1}_ADDRESS]'] = vars.host_fields['host1_entry_address'].get()
+        form_data[f'[HOST{idx+1}_PHONE]'] = vars.host_fields['host1_entry_phone'].get()
+        form_data[f'[HOST{idx+1}_OCCUPATION]'] = vars.host_fields['host1_entry_occupation'].get()
+        form_data[f'[HOST{idx+1}_EMAIL]'] = vars.host_fields['host1_entry_email'].get()
+        form_data[f'[HOST{idx+1}_RELATION_TO_HOST2]'] = vars.host_fields['host1_entry_relation_to_host2'].get()
 
-    form_data['[HOST2_NAME]'] = vars.host2_fields['host2_name'].get()
-    form_data['[HOST2_BIRTH]'] = vars.host2_fields['host2_birth'].get()
-    form_data['[HOST2_STATUS]'] = vars.host2_fields['host2_status'].get()
-    form_data['[HOST2_PASSPORT]'] = vars.host2_fields['host2_passport'].get()
-    form_data['[HOST2_ADDRESS]'] = vars.host2_fields['host2_address'].get()
-    form_data['[HOST2_PHONE]'] = vars.host2_fields['host2_phone'].get()
-    form_data['[HOST2_OCCUPATION]'] = vars.host2_fields['host2_occupation'].get()
-    form_data['[HOST2_EMAIL]'] = vars.host2_fields['host2_email'].get()
-    form_data['[HOST2_RELATION_TO_HOST1]'] = vars.host2_fields['host2_relation_to_host1'].get()
+    form_data['[HOST2_NAME]'] = vars.host_fields['host2_entry_name'].get()
+    form_data['[HOST2_BIRTH]'] = vars.host_fields['host2_entry_birth'].get()
+    form_data['[HOST2_STATUS]'] = vars.host_fields['host2_entry_status'].get()
+    form_data['[HOST2_PASSPORT]'] = vars.host_fields['host2_entry_passport'].get()
+    form_data['[HOST2_ADDRESS]'] = vars.host_fields['host2_entry_address'].get()
+    form_data['[HOST2_PHONE]'] = vars.host_fields['host2_entry_phone'].get()
+    form_data['[HOST2_OCCUPATION]'] = vars.host_fields['host2_entry_occupation'].get()
+    form_data['[HOST2_EMAIL]'] = vars.host_fields['host2_entry_email'].get()
+    form_data['[HOST2_RELATION_TO_HOST1]'] = vars.host_fields['host2_entry_relation_to_host1'].get()
 
-    form_data['[GUEST_NAME]'] = vars.guest_fields['guest_name'].get()
-    form_data['[GUEST_BIRTH]'] = vars.guest_fields['guest_birth'].get()
-    form_data['[GUEST_CITIZENSHIP]'] = vars.guest_fields['guest_citizenship'].get()
-    form_data['[GUEST_PASSPORT]'] = vars.guest_fields['guest_passport'].get()
-    form_data['[GUEST_ADDRESS]'] = vars.guest_fields['guest_address'].get()
-    form_data['[GUEST_PHONE]'] = vars.guest_fields['guest_phone'].get()
-    form_data['[GUEST_OCCUPATION]'] = vars.guest_fields['guest_occupation'].get()
-    form_data['[GUEST_PURPOSE]'] = vars.guest_fields['guest_purpose'].get()
-    form_data['[GUEST_ARRIVAL]'] = vars.guest_fields['guest_arrival'].get()
-    form_data['[GUEST_DEPARTURE]'] = vars.guest_fields['guest_departure'].get()
-    form_data['[GUEST_RELATIONSHIP]'] = vars.guest_fields['guest_relationship_to_host1'].get()
-    form_data['[GUEST_CANADIAN_ADDRESS]'] = vars.guest_fields['guest_canadian_address'].get()
+    form_data['[GUEST_NAME]'] = vars.guest_fields['guest1_entry_name'].get()
+    form_data['[GUEST_BIRTH]'] = vars.guest_fields['guest1_entry_birth'].get()
+    form_data['[GUEST_CITIZENSHIP]'] = vars.guest_fields['guest1_entry_citizenship'].get()
+    form_data['[GUEST_PASSPORT]'] = vars.guest_fields['guest1_entry_passport'].get()
+    form_data['[GUEST_ADDRESS]'] = vars.guest_fields['guest1_entry_address'].get()
+    form_data['[GUEST_PHONE]'] = vars.guest_fields['guest1_entry_phone'].get()
+    form_data['[GUEST_OCCUPATION]'] = vars.guest_fields['guest1_entry_occupation'].get()
+    form_data['[GUEST_PURPOSE]'] = vars.guest_fields['guest1_entry_purpose'].get()
+    form_data['[GUEST_ARRIVAL]'] = vars.guest_fields['guest1_entry_arrival'].get()
+    form_data['[GUEST_DEPARTURE]'] = vars.guest_fields['guest1_entry_departure'].get()
+    form_data['[GUEST_RELATIONSHIP]'] = vars.guest_fields['guest1_entry_relationship_to_host1'].get()
+    form_data['[GUEST_CANADIAN_ADDRESS]'] = vars.guest_fields['guest1_entry_canadian_address'].get()
 
-    form_data['[BEARER]'] = vars.finances_fields['bearer_of_expenses'].get()
-    form_data['[ATTACHED]'] = vars.finances_fields['attached_documents'].get()
+    form_data['[BEARER]'] = vars.finances_fields['finances_combo_bearer_of_expenses'].get()
+    form_data['[ATTACHED]'] = vars.finances_fields['finances_entry_attached_documents'].get()
 
     return {
         'form_data': form_data, 
@@ -106,65 +106,68 @@ def generate_doc():
         popup(title="", message=f'Exception while editing document\n\nPlacing {current_replace}\n\n{e}', corner_radius=4)
         return False
 
-    # add the table containing host1's details
-    insert_table(
-        document=doc, 
-        table_heading="\nMy details are as follows.", 
-        table_items=[
-            {"label": "Full Name", "info": vars.host1_fields['host1_name'].get()},
-            {"label": "Date of Birth", "info": vars.host1_fields['host1_birth'].get()},
-            {"label": "Canadian Status", "info": vars.host1_fields['host1_status'].get()},
-            {"label": "Passport Number", "info": vars.host1_fields['host1_passport'].get()},
-            {"label": "Residential Address", "info": vars.host1_fields['host1_address'].get()},
-            {"label": "Phone Number", "info": vars.host1_fields['host1_phone'].get()},
-            {"label": "Current Occupation", "info": vars.host1_fields['host1_occupation'].get()},
-            {"label": "Email Address", "info": vars.host1_fields['host1_email'].get()},
-        ]
+    #
+    insert_paragraph(
+        paragraph=doc.add_paragraph(),
+        text=(
+            f"This letter is to express me and my {vars.host_fields['host2_entry_relation_to_host1'].get()}'s interest in inviting {vars.guest_fields['guest1_entry_name'].get()} Canada " + 
+            f"and to furthermore support the Temporary Resident Visa application."
+        )
     )
 
-    # add the table containing host2's details
-    insert_table(
-        document=doc, 
-        table_heading=f"\n\nMy {vars.host1_fields['host1_relation_to_host2'].get()}'s details are as follows.", 
-        table_items=[
-            {"label": "Full Name", "info": vars.host2_fields['host2_name'].get()},
-            {"label": "Date of Birth", "info": vars.host2_fields['host2_birth'].get()},
-            {"label": "Canadian Status", "info": vars.host2_fields['host2_status'].get()},
-            {"label": "Passport Number", "info": vars.host2_fields['host2_passport'].get()},
-            {"label": "Residential Address", "info": vars.host2_fields['host2_address'].get()},
-            {"label": "Phone Number", "info": vars.host2_fields['host2_phone'].get()},
-            {"label": "Current Occupation", "info": vars.host2_fields['host2_occupation'].get()},
-            {"label": "Email Address", "info": vars.host2_fields['host2_email'].get()},
-        ]
-    )
+    # add the table containing hosts' details
+    for index in range(1,3):
+        insert_table(
+            document=doc, 
+            table_heading="\nMy details are as follows," if index==1 else f"\n\nMy {vars.host_fields['host1_entry_relation_to_host2'].get()}'s details are as follows,", 
+            table_items=[
+                {"label": "Full Name", "info": vars.host_fields[f'host{index}_entry_name'].get()},
+                {"label": "Date of Birth", "info": vars.host_fields[f'host{index}_entry_birth'].get()},
+                {"label": "Canadian Status", "info": vars.host_fields[f'host{index}_entry_status'].get()},
+                {"label": "Passport Number", "info": vars.host_fields[f'host{index}_entry_passport'].get()},
+                {"label": "Residential Address", "info": vars.host_fields[f'host{index}_entry_address'].get()},
+                {"label": "Phone Number", "info": vars.host_fields[f'host{index}_entry_phone'].get()},
+                {"label": "Current Occupation", "info": vars.host_fields[f'host{index}_entry_occupation'].get()},
+                {"label": "Email Address", "info": vars.host_fields[f'host{index}_entry_email'].get()},
+            ]
+        )
 
-    doc.add_page_break() 
+    doc.add_page_break()
 
-    # add the table containing guest's details
-    insert_table(
-        document=doc, 
-        table_heading="The details of the invitee are as follows.", 
-        table_items=[
-            {"label": "Full Name", "info": vars.guest_fields['guest_name'].get()},
-            {"label": "Date of Birth", "info": vars.guest_fields['guest_birth'].get()},
-            {"label": "Residential Address", "info": vars.guest_fields['guest_address'].get()},
-            {"label": "Phone Number", "info": vars.guest_fields['guest_phone'].get()},
-            {"label": "Current Occupation", "info": vars.guest_fields['guest_occupation'].get()},
-            {"label": "Relationship to Inviter", "info": vars.guest_fields['guest_relationship_to_host1'].get()},
-            {"label": "Purpose of Visit", "info": vars.guest_fields['guest_purpose'].get()},
-            {"label": "Arrival Date", "info": vars.guest_fields['guest_arrival'].get()},
-            {"label": "Departure Date", "info": vars.guest_fields['guest_departure'].get()},
-            {"label": "Primary Residence in Canada", "info": vars.guest_fields['guest_canadian_address'].get()},
-        ]
-    )
+    for index in range(1,4):
+        guest_name = vars.guest_fields[f'guest{index}_entry_name'].get()
+
+        # add the table containing guest's details
+        insert_table(
+            document=doc, 
+            table_heading=f"The details of {guest_name} are as follows,", 
+            table_items=[
+                {"label": "Full Name", "info": vars.guest_fields[f'guest{index}_entry_name'].get()},
+                {"label": "Date of Birth", "info": vars.guest_fields[f'guest{index}_entry_birth'].get()},
+                {"label": "Residential Address", "info": vars.guest_fields[f'guest{index}_entry_address'].get()},
+                {"label": "Phone Number", "info": vars.guest_fields[f'guest{index}_entry_phone'].get()},
+                {"label": "Current Occupation", "info": vars.guest_fields[f'guest{index}_entry_occupation'].get()},
+                {"label": "Relationship to Inviter", "info": vars.guest_fields[f'guest{index}_entry_relationship_to_host1'].get()},
+                {"label": "Purpose of Visit", "info": vars.guest_fields[f'guest{index}_entry_purpose'].get()},
+                {"label": "Arrival Date", "info": vars.guest_fields[f'guest{index}_entry_arrival'].get()},
+                {"label": "Departure Date", "info": vars.guest_fields[f'guest{index}_entry_departure'].get()},
+                {"label": "Primary Residence in Canada", "info": vars.guest_fields[f'guest{index}_entry_canadian_address'].get()},
+            ]
+        )
+
+        if index < 3:
+            insert_paragraph(
+                paragraph=doc.add_paragraph(),
+                text=("\n")
+            )
 
     #
     insert_paragraph(
         paragraph=doc.add_paragraph(),
         text=(
-            f"\nThe airfare, travel expenses, would be borne by {vars.guest_fields['guest_name'].get()}. " +
-            f"All expenses in connection with {vars.guest_fields['guest_name'].get()}’s visit to Canada will be {vars.finances_fields['bearer_of_expenses'].get()}. " +
-            f"Attached with the application are {vars.finances_fields['attached_documents'].get()}." +
+            f"\nThe airfare, travel expenses, would be borne by {vars.guest_fields['guest1_entry_name'].get()}, {vars.guest_fields['guest2_entry_name'].get()}, {vars.guest_fields['guest3_entry_name'].get()} " +
+            f"All expenses in connection with their visit to Canada will be {vars.finances_fields['finances_combo_bearer_of_expenses'].get()}. " +
+            f"Attached with the application are {vars.finances_fields['finances_entry_attached_documents'].get()}." +
             f"\n\nIf any clarification or information is required, please do not hesitate to contact us at our email addresses and phone numbers below."
         )
     )
@@ -175,9 +178,9 @@ def generate_doc():
         table_heading="\n\n\n\n",
         table_items=[
             {"label": "_________________________________", "info": "_________________________________"},
-            {"label": vars.host1_fields['host1_name'].get(), "info": vars.host2_fields['host2_name'].get()},
-            {"label": vars.host1_fields['host1_email'].get(), "info": vars.host2_fields['host2_email'].get()},
-            {"label": vars.host1_fields['host1_phone'].get(), "info": vars.host2_fields['host2_phone'].get()},
+            {"label": vars.host_fields['host1_entry_name'].get(), "info": vars.host_fields['host2_entry_name'].get()},
+            {"label": vars.host_fields['host1_entry_email'].get(), "info": vars.host_fields['host2_entry_email'].get()},
+            {"label": vars.host_fields['host1_entry_phone'].get(), "info": vars.host_fields['host2_entry_phone'].get()},
         ],
         table_props={
             'color': '#ffffff',
@@ -190,6 +193,7 @@ def generate_doc():
 
     # create the output file
     save_doc(doc, init_data)
+
 
 # set up folders and save files, print if needed
 def save_doc(doc, init_data):

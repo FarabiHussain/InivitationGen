@@ -6,8 +6,8 @@ from tabview import *
 from logic_document import *
 from logic_gui import *
 from path_manager import *
-from form_entry import *
-from form_combo import *
+from FormEntry import *
+from FormCombo import *
 
 ##############################################################################################
 ## INITIALIZATION
@@ -139,7 +139,8 @@ vars.form['clear_btn'].place(x=w-485, y=h-60)
 vars.form['docx_btn'].place(x=w-395, y=h-60)
 vars.form['output_btn'].place(x=w-305, y=h-60)
 
-# testfill_fields()
-# generate_doc()
+testfill_fields()
+generate_doc()
 vars.root.mainloop()
-vars.root.after(500, lambda: vars.root.destroy())
+vars.root.after(1000, lambda: vars.root.quit())
+vars.root.after(1000, lambda: vars.root.destroy())
