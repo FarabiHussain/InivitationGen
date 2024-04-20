@@ -4,10 +4,10 @@ from PIL import Image
 from path_manager import resource_path
 
 
-## initalize the variables to be used throughout the app
+# initalize the variables to be used throughout the app
 def init():
     global screen_sizes, form, root, popups, cwd, icons, font_family, generic_counter
-    global guest_fields, host_fields, finances_fields
+    global field_dicts #, guest_fields, host_fields, finances_fields
     ctk.set_appearance_mode("light")
     ctk.set_default_color_theme("dark-blue")
 
@@ -18,13 +18,69 @@ def init():
     screen_sizes = {"ws": root.winfo_screenwidth(), "hs": root.winfo_screenheight()}
     form = {"version": "v1.0.0"}
     popups = {"printer": None, "history": None, "elem": {}}
-    icons = {"folder": None, "clear": None, "docx": None}
+    icons = populate_icons()
     generic_counter = 0
 
-    guest_fields = {}
-    host_fields = {}
+    field_dicts = []
+    field_dicts.append(define_guest_fields())
+    field_dicts.append(define_host_fields())
+    field_dicts.append(define_finances_fields()
+)
 
-    # define the
+
+def define_guest_fields():
+    fields = {}
+
+    for i in range(3):
+        fields[f'guest{i+1}_entry_name'] = None
+        fields[f'guest{i+1}_entry_birth'] = None
+        fields[f'guest{i+1}_entry_citizenship'] = None
+        fields[f'guest{i+1}_entry_passport'] = None
+        fields[f'guest{i+1}_entry_address'] = None
+        fields[f'guest{i+1}_entry_phone'] = None
+        fields[f'guest{i+1}_entry_occupation'] = None
+        fields[f'guest{i+1}_entry_purpose'] = None
+        fields[f'guest{i+1}_entry_relationship_to_host1'] = None
+        fields[f'guest{i+1}_entry_canadian_address'] = None
+
+        if i==0:
+            fields[f'guest{i+1}_datepicker_arrival'] = None
+            fields[f'guest{i+1}_datepicker_departure'] = None
+
+    return fields
+
+
+def define_host_fields():
+    fields = {}
+
+    for i in range(2):
+        fields[f'host{i+1}_entry_name'] = None
+        fields[f'host{i+1}_entry_birth'] = None
+        fields[f'host{i+1}_entry_status'] = None
+        fields[f'host{i+1}_entry_passport'] = None
+        fields[f'host{i+1}_entry_address'] = None
+        fields[f'host{i+1}_entry_phone'] = None
+        fields[f'host{i+1}_entry_occupation'] = None
+        fields[f'host{i+1}_entry_email'] = None
+
+    fields["host1_entry_relation_to_host2"] = None
+    fields["host2_entry_relation_to_host1"] = None
+
+    return fields
+
+
+def define_finances_fields():
+    fields = {
+        "finances_combo_bearer_of_expenses": None,
+        "finances_entry_attached_documents": None,
+    }
+
+    return fields
+
+
+def populate_icons():
+    icons = {"folder": None, "clear": None, "docx": None}
+
     for icon_name in list(icons.keys()):
         try:
             icons[icon_name] = Image.open(resource_path("assets\\icons\\" + icon_name + ".png"))
@@ -39,35 +95,4 @@ def init():
         except Exception as e:
             pass
 
-    for i in range(3):
-        guest_fields[f'guest{i+1}_entry_name'] = None
-        guest_fields[f'guest{i+1}_entry_birth'] = None
-        guest_fields[f'guest{i+1}_entry_citizenship'] = None
-        guest_fields[f'guest{i+1}_entry_passport'] = None
-        guest_fields[f'guest{i+1}_entry_address'] = None
-        guest_fields[f'guest{i+1}_entry_phone'] = None
-        guest_fields[f'guest{i+1}_entry_occupation'] = None
-        guest_fields[f'guest{i+1}_entry_purpose'] = None
-        guest_fields[f'guest{i+1}_entry_arrival'] = None
-        guest_fields[f'guest{i+1}_entry_departure'] = None
-        guest_fields[f'guest{i+1}_entry_relationship_to_host1'] = None
-        guest_fields[f'guest{i+1}_entry_canadian_address'] = None
-
-    for i in range(2):
-        host_fields[f'host{i+1}_entry_name'] = None
-        host_fields[f'host{i+1}_entry_birth'] = None
-        host_fields[f'host{i+1}_entry_status'] = None
-        host_fields[f'host{i+1}_entry_passport'] = None
-        host_fields[f'host{i+1}_entry_address'] = None
-        host_fields[f'host{i+1}_entry_phone'] = None
-        host_fields[f'host{i+1}_entry_occupation'] = None
-        host_fields[f'host{i+1}_entry_email'] = None
-
-    host_fields["host1_entry_relation_to_host2"] = None
-    host_fields["host2_entry_relation_to_host1"] = None
-
-    finances_fields = {
-        "finances_combo_bearer_of_expenses": None,
-        "finances_entry_attached_documents": None,
-    }
-
+    return icons

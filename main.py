@@ -6,11 +6,10 @@ from tabview import *
 from logic_document import *
 from logic_gui import *
 from path_manager import *
-from FormEntry import *
-from FormCombo import *
+from GUI import *
 
 ##############################################################################################
-## INITIALIZATION
+# INITIALIZATION
 ##############################################################################################
 
 vars.init()
@@ -41,7 +40,7 @@ except Exception as e:
     pass
 
 ##############################################################################################
-## FRAMES
+# FRAMES
 ##############################################################################################
 
 container = Tabview(
@@ -76,16 +75,10 @@ vars.form['finances_frame'] = ctk.CTkFrame(container_tabs['Finances'], corner_ra
 vars.form['finances_frame'].pack(expand=True, fill="both", padx=10, pady=10)
 
 ##############################################################################################
-## INPUT SECTION
+# INPUT SECTION
 ##############################################################################################
 
-field_dicts = [
-    vars.guest_fields, 
-    vars.host_fields, 
-    vars.finances_fields
-]
-
-for current_dict in field_dicts:
+for current_dict in vars.field_dicts:
     offset = 0
 
     for field_idx, field in enumerate(current_dict.keys()):
@@ -102,19 +95,27 @@ for current_dict in field_dicts:
 
         # display the right component
         if '_combo_' in field:
-            current_dict[field] = FormCombo(
+            current_dict[field] = ComboBox(
                 master=vars.form[curr_frame], 
                 label_text=entry_label, 
                 options=[
-                    "paid for by me and will be my responsibility.", 
-                    "their own responsibility and will be paid for by themselves. I will provide additional support if any assistance is needed."
+                    "paid for by me and will be my responsibility", 
+                    "their own responsibility and will be paid for by themselves. I will provide additional support if any assistance is needed"
                 ], 
                 left_offset=5, 
                 top_offset=40*offset
             )
 
         elif '_entry_' in field:
-            current_dict[field] = FormEntry(
+            current_dict[field] = Entry(
+                master=vars.form[curr_frame], 
+                label_text=entry_label, 
+                left_offset=5, 
+                top_offset=40*offset
+            )
+
+        elif '_datepicker_' in field:
+            current_dict[field] = DatePicker(
                 master=vars.form[curr_frame], 
                 label_text=entry_label, 
                 left_offset=5, 
@@ -126,7 +127,7 @@ for current_dict in field_dicts:
 
 
 ##############################################################################################
-## BUTTONS
+# BUTTONS
 ##############################################################################################
 
 vars.form['test_btn'] = ctk.CTkButton(vars.root, text="", border_width=0, corner_radius=2, command=lambda:testfill_fields(), width=72, height=36)
@@ -141,6 +142,4 @@ vars.form['output_btn'].place(x=w-305, y=h-60)
 
 testfill_fields()
 generate_doc()
-# vars.root.mainloop()
-# vars.root.after(1000, lambda: vars.root.quit())
-# vars.root.after(1000, lambda: vars.root.destroy())
+vars.root.mainloop()

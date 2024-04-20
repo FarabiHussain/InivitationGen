@@ -12,7 +12,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from Entity import *
 
 
-## initializes the fill info, output and input files
+# initializes the fill info, output and input files
 def process_data():
     date_on_document = datetime.datetime.now()
     initialize_entities()
@@ -29,6 +29,10 @@ def process_data():
 
     form_data['[GUEST_INFO]'] = ""
     form_data['[GUEST_NAMES]'] = format_collective_names(guests_list)
+    # form_data[f'[BEARER]'] = vars.finances_fields['finances_combo_bearer_of_expenses'].get()
+    form_data[f'[GUEST_PURPOSE]'] = guests_list[0].get('purpose')
+    form_data[f'[GUEST_ARRIVAL]'] = guests_list[0].get('arrival')
+    form_data[f'[GUEST_DEPARTURE]'] = guests_list[0].get('departure')
 
     for i in range(len(hosts_list)):
         host = hosts_list[i]
@@ -55,14 +59,12 @@ def process_data():
         form_data[f'[GUEST{i+1}_OCCUPATION]'] = guest.get('occupation')
         form_data[f'[GUEST{i+1}_RELATIONSHIP]'] = guest.get('relationship_to_host1')
         form_data[f'[GUEST{i+1}_CANADIAN_ADDRESS]'] = guest.get('canadian_address')
-        form_data[f'[GUEST_PURPOSE]'] = guest.get('purpose')
-        form_data[f'[GUEST_ARRIVAL]'] = guest.get('arrival')
-        form_data[f'[GUEST_DEPARTURE]'] = guest.get('departure')
 
-    # form_data['[BEARER]'] = vars.finances_fields['finances_combo_bearer_of_expenses'].get()
-    # form_data['[ATTACHED]'] = vars.finances_fields['finances_entry_attached_documents'].get()
-
-    return {'form_data': form_data, 'input_file': input_file, 'output_file': output_file}
+    return {
+        'form_data': form_data, 
+        'input_file': input_file, 
+        'output_file': output_file
+    }
 
 
 # create objects of hosts and guests
@@ -73,22 +75,25 @@ def initialize_entities():
     guests_list = []
     hosts_list = []
 
+    guest_fields = vars.field_dicts[0]
+    host_fields = vars.field_dicts[1]
+
     for i in range(1,4):
 
         # append guests
         guest=Guest({
-            'name': vars.guest_fields[f'guest{i}_entry_name'].get(),
-            'birth': vars.guest_fields[f'guest{i}_entry_birth'].get(),
-            'address': vars.guest_fields[f'guest{i}_entry_address'].get(),
-            'phone': vars.guest_fields[f'guest{i}_entry_phone'].get(),
-            'occupation': vars.guest_fields[f'guest{i}_entry_occupation'].get(),
-            'relationship_to_host1': vars.guest_fields[f'guest{i}_entry_relationship_to_host1'].get(),
-            'purpose': vars.guest_fields[f'guest{i}_entry_purpose'].get(),
-            'arrival': vars.guest_fields[f'guest{i}_entry_arrival'].get(),
-            'departure': vars.guest_fields[f'guest{i}_entry_departure'].get(),
-            'canadian_address': vars.guest_fields[f'guest{i}_entry_canadian_address'].get(),
-            'passport': vars.guest_fields[f'guest{i}_entry_passport'].get(),
-            'citizenship': vars.guest_fields[f'guest{i}_entry_citizenship'].get(),
+            'name': guest_fields[f'guest{i}_entry_name'].get(),
+            'birth': guest_fields[f'guest{i}_entry_birth'].get(),
+            'address': guest_fields[f'guest{i}_entry_address'].get(),
+            'phone': guest_fields[f'guest{i}_entry_phone'].get(),
+            'occupation': guest_fields[f'guest{i}_entry_occupation'].get(),
+            'relationship_to_host1': guest_fields[f'guest{i}_entry_relationship_to_host1'].get(),
+            'purpose': guest_fields[f'guest{i}_entry_purpose'].get(),
+            'arrival': guest_fields[f'guest1_datepicker_arrival'].get(),
+            'departure': guest_fields[f'guest1_datepicker_departure'].get(),
+            'canadian_address': guest_fields[f'guest{i}_entry_canadian_address'].get(),
+            'passport': guest_fields[f'guest{i}_entry_passport'].get(),
+            'citizenship': guest_fields[f'guest{i}_entry_citizenship'].get(),
         })
 
         if guest.is_filled():
@@ -97,15 +102,15 @@ def initialize_entities():
         # append hosts
         if (i < 3):
             host=Host({
-                'name': vars.host_fields[f'host{i}_entry_name'].get(),
-                'birth': vars.host_fields[f'host{i}_entry_birth'].get(),
-                'status': vars.host_fields[f'host{i}_entry_status'].get(),
-                'passport': vars.host_fields[f'host{i}_entry_passport'].get(),
-                'address': vars.host_fields[f'host{i}_entry_address'].get(),
-                'phone': vars.host_fields[f'host{i}_entry_phone'].get(),
-                'occupation': vars.host_fields[f'host{i}_entry_occupation'].get(),
-                'email': vars.host_fields[f'host{i}_entry_email'].get(),
-                'relation_to_other_host': vars.host_fields[f'host{"1" if i == 1 else "2"}_entry_relation_to_host{"2" if i == 1 else "1"}'].get(),
+                'name': host_fields[f'host{i}_entry_name'].get(),
+                'birth': host_fields[f'host{i}_entry_birth'].get(),
+                'status': host_fields[f'host{i}_entry_status'].get(),
+                'passport': host_fields[f'host{i}_entry_passport'].get(),
+                'address': host_fields[f'host{i}_entry_address'].get(),
+                'phone': host_fields[f'host{i}_entry_phone'].get(),
+                'occupation': host_fields[f'host{i}_entry_occupation'].get(),
+                'email': host_fields[f'host{i}_entry_email'].get(),
+                'relation_to_other_host': host_fields[f'host{"1" if i == 1 else "2"}_entry_relation_to_host{"2" if i == 1 else "1"}'].get(),
             })
 
             if host.is_filled():
@@ -116,6 +121,9 @@ def initialize_entities():
 def generate_doc():
     data = None
     doc = None
+    guest_fields = vars.field_dicts[0]
+    host_fields = vars.field_dicts[1]
+    finances_fields = vars.field_dicts[2]
 
     # initiate the data and document
     try:
@@ -142,7 +150,7 @@ def generate_doc():
     insert_paragraph(
         paragraph=doc.add_paragraph(),
         text=(
-            f"This letter is to express me and my {vars.host_fields['host2_entry_relation_to_host1'].get()}'s interest in inviting {vars.guest_fields['guest1_entry_name'].get()} Canada " + 
+            f"This letter is to express me and my {host_fields['host2_entry_relation_to_host1'].get()}'s interest in inviting {guest_fields['guest1_entry_name'].get()} Canada " + 
             f"and to furthermore support the Temporary Resident Visa application."
         )
     )
@@ -151,16 +159,16 @@ def generate_doc():
     for index in range(1,3):
         insert_table(
             document=doc, 
-            table_heading="\nMy details are as follows," if index==1 else f"\n\nMy {vars.host_fields['host1_entry_relation_to_host2'].get()}'s details are as follows,", 
+            table_heading="\nMy details are as follows," if index==1 else f"\n\nMy {host_fields['host1_entry_relation_to_host2'].get()}'s details are as follows,", 
             table_items=[
-                {"label": "Full Name", "info": vars.host_fields[f'host{index}_entry_name'].get()},
-                {"label": "Date of Birth", "info": vars.host_fields[f'host{index}_entry_birth'].get()},
-                {"label": "Canadian Status", "info": vars.host_fields[f'host{index}_entry_status'].get()},
-                {"label": "Passport Number", "info": vars.host_fields[f'host{index}_entry_passport'].get()},
-                {"label": "Residential Address", "info": vars.host_fields[f'host{index}_entry_address'].get()},
-                {"label": "Phone Number", "info": vars.host_fields[f'host{index}_entry_phone'].get()},
-                {"label": "Current Occupation", "info": vars.host_fields[f'host{index}_entry_occupation'].get()},
-                {"label": "Email Address", "info": vars.host_fields[f'host{index}_entry_email'].get()},
+                {"label": "Full Name", "info": host_fields[f'host{index}_entry_name'].get()},
+                {"label": "Date of Birth", "info": host_fields[f'host{index}_entry_birth'].get()},
+                {"label": "Canadian Status", "info": host_fields[f'host{index}_entry_status'].get()},
+                {"label": "Passport Number", "info": host_fields[f'host{index}_entry_passport'].get()},
+                {"label": "Residential Address", "info": host_fields[f'host{index}_entry_address'].get()},
+                {"label": "Phone Number", "info": host_fields[f'host{index}_entry_phone'].get()},
+                {"label": "Current Occupation", "info": host_fields[f'host{index}_entry_occupation'].get()},
+                {"label": "Email Address", "info": host_fields[f'host{index}_entry_email'].get()},
             ]
         )
 
@@ -190,22 +198,27 @@ def generate_doc():
             ]
         )
 
+        if (i==1) and len(guests_list) == 3:
+            doc.add_page_break()
+
         if i < 3:
             insert_paragraph(
                 paragraph=doc.add_paragraph(),
-                text=("\n")
+                text=("")
             )
 
-    # invitation letter outro
-    insert_paragraph(
-        paragraph=doc.add_paragraph(),
-        text=(
-            f"\nThe airfare, travel expenses, would be borne by {vars.guest_fields['guest1_entry_name'].get()}, {vars.guest_fields['guest2_entry_name'].get()}, {vars.guest_fields['guest3_entry_name'].get()} " +
-            f"All expenses in connection with their visit to Canada will be {vars.finances_fields['finances_combo_bearer_of_expenses'].get()}. " +
-            f"Attached with the application are {vars.finances_fields['finances_entry_attached_documents'].get()}." +
-            f"\n\nIf any clarification or information is required, please do not hesitate to contact us at our email addresses and phone numbers below."
-        )
+    outro_text=(
+        f"The airfare, travel expenses, would be borne by {format_collective_names(guests_list)}. " +
+        f"All expenses in connection with their visit to Canada will be {finances_fields['finances_combo_bearer_of_expenses'].get()}. "
     )
+
+    # attached documents
+    if len(finances_fields['finances_entry_attached_documents'].get()) > 0:
+        outro_text += f"\n\nAttached with the application are {finances_fields['finances_entry_attached_documents'].get()}. "
+
+    outro_text += f"\n\nIf any clarification or information is required, please do not hesitate to contact us at our email addresses and phone numbers below."
+
+    insert_paragraph(paragraph=doc.add_paragraph(), text=(outro_text))
 
     # table for hosts to sign
     insert_table(
@@ -213,9 +226,9 @@ def generate_doc():
         table_heading="\n\n\n\n",
         table_items=[
             {"label": "_________________________________", "info": "_________________________________"},
-            {"label": vars.host_fields['host1_entry_name'].get(), "info": vars.host_fields['host2_entry_name'].get()},
-            {"label": vars.host_fields['host1_entry_email'].get(), "info": vars.host_fields['host2_entry_email'].get()},
-            {"label": vars.host_fields['host1_entry_phone'].get(), "info": vars.host_fields['host2_entry_phone'].get()},
+            {"label": host_fields['host1_entry_name'].get(), "info": host_fields['host2_entry_name'].get()},
+            {"label": host_fields['host1_entry_email'].get(), "info": host_fields['host2_entry_email'].get()},
+            {"label": host_fields['host1_entry_phone'].get(), "info": host_fields['host2_entry_phone'].get()},
         ],
         table_props={
             'color': '#ffffff',

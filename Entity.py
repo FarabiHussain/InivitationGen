@@ -78,6 +78,8 @@ class Host(Entity):
             "occupation",
             "email",
             "relation_to_other_host",
+            "bearer_of_expenses",
+            "attached_documents",
         ]
 
         super().__init__(new_props, valid_props)

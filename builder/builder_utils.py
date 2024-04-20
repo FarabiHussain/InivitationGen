@@ -7,7 +7,7 @@ import sys
 from datetime import datetime as dt
 from subprocess import DEVNULL, STDOUT, check_call
 
-## read the most recent version created
+# read the most recent version created
 def get_version(cwd, ver):
     ver_log_dir = (cwd + '\\builder\\versions.log').replace('\\builder\\builder', '\\builder')
 
@@ -31,12 +31,12 @@ def get_version(cwd, ver):
         print(e)
 
 
-## remove spaces and brackets
+# remove spaces and brackets
 def unformat(formatted):
     return formatted.replace("]","").replace("[","").replace(" ","")
 
 
-## clean up existing files
+# clean up existing files
 def cleanup(cwd, isInitial = False):
     if os.path.exists(cwd + "\\build"):
         shutil.rmtree(cwd + "\\build")
@@ -55,7 +55,7 @@ def cleanup(cwd, isInitial = False):
             os.remove(f)
 
 
-## pip install libs needed to build the app 
+# pip install libs needed to build the app 
 def install_dependencies():
     os.system('cls')
     for library in ['pyinstaller', 'python-dateutil', 'python-docx', 'docx2pdf', 'customtkinter', 'CTkTable', 'CTkMessagebox', 'pandas']:
@@ -64,29 +64,29 @@ def install_dependencies():
     print("done")
 
 
-## run the PyInstaller build command
+# run the PyInstaller build command
 def build_exe(cwd, ver):
     cleanup(cwd, isInitial = True)
 
-    ## build the exe from py files
+    # build the exe from py files
     os.system("cls")
     print("building exe...")
     check_call(['python', '-m', 'PyInstaller', 'main.py', '--noconsole', '--onefile', '-w', '--icon=' + cwd + '\\assets\\icons\\logo.ico', f'--name={((os.getcwd()).split("\\")[-1])}'], stdout=DEVNULL, stderr=STDOUT)
     print("done")
 
-    ## after the exe is built, copy over the assets folder
+    # after the exe is built, copy over the assets folder
     try:
         shutil.copytree(cwd + "\\assets\\", cwd + "\\dist\\assets\\")
     except: 
         print("could not copy assets folder")
 
-    ## zip the contents of the dist folder
+    # zip the contents of the dist folder
     try:
         shutil.make_archive("v" + (".").join(ver), 'zip', cwd + "\\dist")
     except Exception as e: 
         print("could not zip dist folder: ", e)
 
-    ## move the created zip file into the releases folder
+    # move the created zip file into the releases folder
     try:
         filename = f"v{(".").join(ver)}.zip"
         for f in glob.glob(cwd + "\\releases\\" + filename):
@@ -96,12 +96,12 @@ def build_exe(cwd, ver):
     except Exception as e: 
         print("could not move zip file: ", e)
 
-    ## final cleanup of temporary files
+    # final cleanup of temporary files
     print("cleaning up...")
     cleanup(cwd, isInitial = False)
     print("done")
 
-    ## write the newest build to the log
+    # write the newest build to the log
     ver_log_dir = (cwd + '\\builder\\versions.log').replace('\\builder\\builder', '\\builder')
 
     with open(ver_log_dir, 'a') as log_file:
@@ -111,7 +111,7 @@ def build_exe(cwd, ver):
     os.startfile(output_dir)
 
 
-## replace the app version in `variables.py` with the selected version 
+# replace the app version in `variables.py` with the selected version 
 def set_version(cwd, ver):
     variables_dir = (cwd + '\\variables.py').replace('\\builder', '')
     print(variables_dir)

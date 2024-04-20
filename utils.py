@@ -4,7 +4,7 @@ from docx.oxml.ns import qn
 from docx.text.paragraph import Paragraph
 from docx.table import _Cell
 
-## format date to `{date + suffix} {full month name} {year}`
+# format date to `{date + suffix} {full month name} {year}`
 def format_date(date_string):
     if date_string == 'advance':
         return date_string
@@ -13,7 +13,7 @@ def format_date(date_string):
     return str(format_day(temp.strftime("%d")) + " " + temp.strftime("%B") + " " + temp.strftime("%Y"))
 
 
-## add suffix 'th'/'st'/'rd' to days
+# add suffix 'th'/'st'/'rd' to days
 def format_day(day):
     day = int(day)
     suffix = ""
@@ -26,7 +26,7 @@ def format_day(day):
     return str(day) + suffix
 
 
-## format phone number to add brackets and hyphens when applicable
+# format phone number to add brackets and hyphens when applicable
 def format_phone(number):
     if (len(number) == 10):  
         area = number[0] + number[1] + number[2]
@@ -37,7 +37,7 @@ def format_phone(number):
     return number
 
 
-##
+# 
 def format_collective_names(enitity_list):
     temp = ""
 
@@ -53,7 +53,7 @@ def format_collective_names(enitity_list):
     return temp
 
 
-##
+# 
 def set_cell_color(cell, color="ffffff"):
     cell_xml = cell._tc
     cell_props = cell_xml.get_or_add_tcPr()
@@ -62,7 +62,7 @@ def set_cell_color(cell, color="ffffff"):
     cell_props.append(shade_obj)
 
 
-##
+# 
 def make_rows_bold(*rows):
     for row in rows:
         for cell in row.cells:
@@ -71,13 +71,13 @@ def make_rows_bold(*rows):
                     run.font.bold = True
 
 
-##
+# 
 def set_row_color(row, color="FFFFFF"):
     for cell in row.cells:
         set_cell_color(cell, color)
 
 
-##
+# 
 def set_cell_border(cell: _Cell, **kwargs):
     """
     Set cell`s border
