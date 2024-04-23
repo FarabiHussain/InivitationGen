@@ -5,7 +5,7 @@ from icecream import ic
 from logic_document import *
 from logic_gui import *
 from path_manager import *
-from Tabv import *
+from Tabview import *
 from GUI import *
 
 ##############################################################################################
