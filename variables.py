@@ -75,7 +75,7 @@ def define_host_fields():
 
 
 def populate_icons():
-    icons = {"folder": None, "clear": None, "docx": None}
+    icons = {"folder": None, "clear": None, "docx": None, "test": None}
 
     for icon_name in list(icons.keys()):
         try:
