@@ -117,7 +117,7 @@ for current_dict in vars.field_dicts:
 
 ##############################################################################################
 
-vars.form['test_btn'] = ctk.CTkButton(vars.root, text="", image=vars.icons['test'], border_width=0, corner_radius=2, command=lambda:testfill_fields(), width=72, height=36)
+vars.form['test_btn'] = ctk.CTkButton(vars.root, text="", image=vars.icons['test'], border_width=0, corner_radius=2, fg_color="#dddddd", command=lambda:testfill_fields(), width=36, height=36)
 vars.form['clear_btn'] = ctk.CTkButton(vars.root, text="", image=vars.icons['clear'], border_width=0, corner_radius=2, fg_color="#c41212", command=lambda:clear_fields(), width=72, height=36)
 vars.form['docx_btn'] = ctk.CTkButton(vars.root, text="", image=vars.icons['docx'], border_width=0, corner_radius=2, fg_color="#383FBC", command=lambda:generate_doc(), width=72, height=36)
 vars.form['output_btn'] = ctk.CTkButton(vars.root, text="", image=vars.icons['folder'], border_width=0, corner_radius=2, fg_color="#808080", command=lambda:os.startfile(cwd + "\\output"), width=72, height=36)
