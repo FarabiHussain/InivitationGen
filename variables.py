@@ -6,8 +6,7 @@ from path_manager import resource_path
 
 # initalize the variables to be used throughout the app
 def init():
-    global screen_sizes, form, root, popups, cwd, icons, font_family, generic_counter
-    global field_dicts #, guest_fields, host_fields, finances_fields
+    global screen_sizes, form, root, popups, cwd, icons, font_family, generic_counter, field_dicts
     ctk.set_appearance_mode("light")
     ctk.set_default_color_theme("dark-blue")
 
@@ -24,8 +23,7 @@ def init():
     field_dicts = []
     field_dicts.append(define_guest_fields())
     field_dicts.append(define_host_fields())
-    field_dicts.append(define_finances_fields()
-)
+    # field_dicts.append(define_finances_fields())
 
 
 def define_guest_fields():
@@ -33,9 +31,9 @@ def define_guest_fields():
 
     for i in range(3):
         fields[f'guest{i+1}_entry_name'] = None
-        fields[f'guest{i+1}_entry_birth'] = None
+        fields[f'guest{i+1}_datepicker_birth'] = None
         fields[f'guest{i+1}_entry_citizenship'] = None
-        fields[f'guest{i+1}_entry_passport'] = None
+        fields[f'guest{i+1}_entry_passport_number'] = None
         fields[f'guest{i+1}_entry_address'] = None
         fields[f'guest{i+1}_entry_phone'] = None
         fields[f'guest{i+1}_entry_occupation'] = None
@@ -55,25 +53,23 @@ def define_host_fields():
 
     for i in range(2):
         fields[f'host{i+1}_entry_name'] = None
-        fields[f'host{i+1}_entry_birth'] = None
+        fields[f'host{i+1}_datepicker_birth'] = None
         fields[f'host{i+1}_entry_status'] = None
-        fields[f'host{i+1}_entry_passport'] = None
+        fields[f'host{i+1}_entry_passport_number'] = None
         fields[f'host{i+1}_entry_address'] = None
         fields[f'host{i+1}_entry_phone'] = None
         fields[f'host{i+1}_entry_occupation'] = None
         fields[f'host{i+1}_entry_email'] = None
 
-    fields["host1_entry_relation_to_host2"] = None
-    fields["host2_entry_relation_to_host1"] = None
+        # fields only in host1
+        if i==0:
+            fields["host1_entry_relationship_to_host2"] = None
+            fields[f"host{i+1}_combo_bearer_of_expenses"] = None,
+            fields[f"host{i+1}_entry_attached_documents"] = None,
 
-    return fields
-
-
-def define_finances_fields():
-    fields = {
-        "finances_combo_bearer_of_expenses": None,
-        "finances_entry_attached_documents": None,
-    }
+        # fields only in host2
+        elif i==1:
+            fields["host2_entry_relationship_to_host1"] = None
 
     return fields
 

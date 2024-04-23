@@ -2,14 +2,12 @@ import docx, os
 import variables as vars
 import customtkinter as ctk
 from icecream import ic
-from tabview import *
 from logic_document import *
 from logic_gui import *
 from path_manager import *
+from Tabview import *
 from GUI import *
 
-##############################################################################################
-# INITIALIZATION
 ##############################################################################################
 
 vars.init()
@@ -40,8 +38,6 @@ except Exception as e:
     pass
 
 ##############################################################################################
-# FRAMES
-##############################################################################################
 
 container = Tabview(
     vars.root, 
@@ -51,7 +47,6 @@ container = Tabview(
         "Guest 3", 
         "Host 1", 
         "Host 2", 
-        "Finances"
     ]
 )
 
@@ -71,11 +66,7 @@ vars.form['host1_frame'] = ctk.CTkFrame(container_tabs['Host 1'], corner_radius=
 vars.form['host1_frame'].pack(expand=True, fill="both", padx=10, pady=10)
 vars.form['host2_frame'] = ctk.CTkFrame(container_tabs['Host 2'], corner_radius=4, fg_color='#ffffff')
 vars.form['host2_frame'].pack(expand=True, fill="both", padx=10, pady=10)
-vars.form['finances_frame'] = ctk.CTkFrame(container_tabs['Finances'], corner_radius=4, fg_color='#ffffff')
-vars.form['finances_frame'].pack(expand=True, fill="both", padx=10, pady=10)
 
-##############################################################################################
-# INPUT SECTION
 ##############################################################################################
 
 for current_dict in vars.field_dicts:
@@ -124,10 +115,6 @@ for current_dict in vars.field_dicts:
 
         offset += 1
 
-
-
-##############################################################################################
-# BUTTONS
 ##############################################################################################
 
 vars.form['test_btn'] = ctk.CTkButton(vars.root, text="", border_width=0, corner_radius=2, command=lambda:testfill_fields(), width=72, height=36)
@@ -141,5 +128,5 @@ vars.form['docx_btn'].place(x=w-395, y=h-60)
 vars.form['output_btn'].place(x=w-305, y=h-60)
 
 testfill_fields()
-generate_doc()
+# generate_doc()
 vars.root.mainloop()

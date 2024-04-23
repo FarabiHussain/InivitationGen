@@ -1,6 +1,7 @@
 import variables as vars
 import customtkinter as ctk
 import datetime
+from CTkMessagebox import CTkMessagebox
 from tkinter import StringVar
 from icecream import ic
 
@@ -65,10 +66,11 @@ class ComboBox(GUI):
 
 
     def get(self) -> str:
+        """returns the first option if nothing was selected"""
         if vars.form[self.textV_name].get() == 'click to choose':
             return self.options[0]
-        
-        return None
+        else:
+            return vars.form[self.textV_name].get()
 
 
 class Entry(GUI):
@@ -188,7 +190,11 @@ class DatePicker(GUI):
     def populate_years(self) -> list:
         years = []
 
-        for i in range(6):
+        for i in range(10):
+            next_year = int(vars.form[f'{self.textV_name}_year'].get()) - 10 + i
+            years.append(str(next_year))
+
+        for i in range(11):
             next_year = int(vars.form[f'{self.textV_name}_year'].get()) + i
             years.append(str(next_year))
 
@@ -217,7 +223,7 @@ class DatePicker(GUI):
 
 
     # set the date 
-    def set(self, m: str = None, d: str|int = None, y: str|int = None) -> str:
+    def set(self, m: str|int = None, d: str|int = None, y: str|int = None) -> str:
         if m is None:
             m = self.today.strftime("%b")
         if d is None:
@@ -225,8 +231,41 @@ class DatePicker(GUI):
         if y is None:
             y = self.today.strftime("%Y")
 
-        vars.form[f'{self.textV_name}_month'].set(m)
+        if type(m) is str:
+            vars.form[f'{self.textV_name}_month'].set(m)
+        else:
+            monthnames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+            vars.form[f'{self.textV_name}_month'].set(monthnames[m])
+
         vars.form[f'{self.textV_name}_day'].set(str(d))
         vars.form[f'{self.textV_name}_year'].set(str(y))
 
         return self.get()
+
+
+class InfoPopup():
+    def __init__(self, msg="InfoPopup") -> None:
+        CTkMessagebox(title="Info", message=msg)
+
+
+class ErrorPopup():
+    def __init__(self, msg="ErrorPopup") -> None:
+        CTkMessagebox(title="Error", message=msg, icon="cancel")
+
+
+class PromptPopup():
+    def __init__(self, msg="PromptPopup", func=lambda:()) -> None:
+        self.prompt = CTkMessagebox(title="Confirm", message=msg, icon="question", option_1="Yes", option_2="Cancel")
+        self.func = func
+
+        if (self.prompt.get() == "Yes"):
+            func()
+
+
+    def execute(self):
+        self.func()
+
+
+    def get(self):
+        return True if self.prompt.get() is "Yes" else False
+

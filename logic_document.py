@@ -28,11 +28,7 @@ def process_data():
     output_file = f"{(datetime.datetime.now().timestamp())}.docx"
 
     form_data['[GUEST_INFO]'] = ""
-    form_data['[GUEST_NAMES]'] = format_collective_names(guests_list)
-    # form_data[f'[BEARER]'] = vars.finances_fields['finances_combo_bearer_of_expenses'].get()
-    form_data[f'[GUEST_PURPOSE]'] = guests_list[0].get('purpose')
-    form_data[f'[GUEST_ARRIVAL]'] = guests_list[0].get('arrival')
-    form_data[f'[GUEST_DEPARTURE]'] = guests_list[0].get('departure')
+
 
     for i in range(len(hosts_list)):
         host = hosts_list[i]
@@ -47,9 +43,13 @@ def process_data():
         form_data[f'[HOST{i+1}_EMAIL]'] = host.get('email')
         form_data[f'[HOST{i+1}_RELATION_TO_HOST{"2" if (i+1)==1 else "1"}]'] = host.get('relation_to_other_host').lower()
 
+        if (i==0):
+            form_data['[BEARER]'] = hosts_list[0].get('bearer')
+
     for i in range(len(guests_list)):
         guest = guests_list[i]
 
+        form_data['[GUEST_NAMES]'] = format_collective_names(guests_list)
         form_data['[GUEST_INFO]'] += f"{"\n" if i > 0 else ""}{guest.get('name')}, born {guest.get('birth')}, Passport Number {guest.get('passport')}"
         form_data[f'[GUEST{i+1}_BIRTH]'] = guest.get('birth')
         form_data[f'[GUEST{i+1}_CITIZENSHIP]'] = guest.get('citizenship')
@@ -60,6 +60,11 @@ def process_data():
         form_data[f'[GUEST{i+1}_RELATIONSHIP]'] = guest.get('relationship_to_host1')
         form_data[f'[GUEST{i+1}_CANADIAN_ADDRESS]'] = guest.get('canadian_address')
 
+        if i==0:
+            form_data[f'[GUEST_PURPOSE]'] = guests_list[0].get('purpose')
+            form_data[f'[GUEST_ARRIVAL]'] = guests_list[0].get('arrival')
+            form_data[f'[GUEST_DEPARTURE]'] = guests_list[0].get('departure')
+
     return {
         'form_data': form_data, 
         'input_file': input_file, 
@@ -69,52 +74,49 @@ def process_data():
 
 # create objects of hosts and guests
 def initialize_entities():
-    global guests_list
-    global hosts_list
+    global guests_list, hosts_list
 
     guests_list = []
     hosts_list = []
-
     guest_fields = vars.field_dicts[0]
     host_fields = vars.field_dicts[1]
 
+    # append guests
     for i in range(1,4):
-
-        # append guests
-        guest=Guest({
+        guests_list.append(Guest({
             'name': guest_fields[f'guest{i}_entry_name'].get(),
-            'birth': guest_fields[f'guest{i}_entry_birth'].get(),
+            'birth': guest_fields[f'guest{i}_datepicker_birth'].get(),
             'address': guest_fields[f'guest{i}_entry_address'].get(),
             'phone': guest_fields[f'guest{i}_entry_phone'].get(),
             'occupation': guest_fields[f'guest{i}_entry_occupation'].get(),
             'relationship_to_host1': guest_fields[f'guest{i}_entry_relationship_to_host1'].get(),
             'purpose': guest_fields[f'guest{i}_entry_purpose'].get(),
+            'canadian_address': guest_fields[f'guest{i}_entry_canadian_address'].get(),
+            'passport': guest_fields[f'guest{i}_entry_passport_number'].get(),
+            'citizenship': guest_fields[f'guest{i}_entry_citizenship'].get(),
+
+            # the arrival and departure dates are always the same as guest1
             'arrival': guest_fields[f'guest1_datepicker_arrival'].get(),
             'departure': guest_fields[f'guest1_datepicker_departure'].get(),
-            'canadian_address': guest_fields[f'guest{i}_entry_canadian_address'].get(),
-            'passport': guest_fields[f'guest{i}_entry_passport'].get(),
-            'citizenship': guest_fields[f'guest{i}_entry_citizenship'].get(),
-        })
+        }))
 
-        if guest.is_filled():
-            guests_list.append(guest) 
+    # append hosts
+    for i in range(1,3):
+        hosts_list.append(Host({
+            'name': host_fields[f'host{i}_entry_name'].get(),
+            'birth': host_fields[f'host{i}_datepicker_birth'].get(),
+            'status': host_fields[f'host{i}_entry_status'].get(),
+            'passport': host_fields[f'host{i}_entry_passport_number'].get(),
+            'address': host_fields[f'host{i}_entry_address'].get(),
+            'phone': host_fields[f'host{i}_entry_phone'].get(),
+            'occupation': host_fields[f'host{i}_entry_occupation'].get(),
+            'email': host_fields[f'host{i}_entry_email'].get(),
+            'relation_to_other_host': host_fields[f'host{"1" if i == 1 else "2"}_entry_relationship_to_host{"2" if i == 1 else "1"}'].get(),
 
-        # append hosts
-        if (i < 3):
-            host=Host({
-                'name': host_fields[f'host{i}_entry_name'].get(),
-                'birth': host_fields[f'host{i}_entry_birth'].get(),
-                'status': host_fields[f'host{i}_entry_status'].get(),
-                'passport': host_fields[f'host{i}_entry_passport'].get(),
-                'address': host_fields[f'host{i}_entry_address'].get(),
-                'phone': host_fields[f'host{i}_entry_phone'].get(),
-                'occupation': host_fields[f'host{i}_entry_occupation'].get(),
-                'email': host_fields[f'host{i}_entry_email'].get(),
-                'relation_to_other_host': host_fields[f'host{"1" if i == 1 else "2"}_entry_relation_to_host{"2" if i == 1 else "1"}'].get(),
-            })
-
-            if host.is_filled():
-                hosts_list.append(host)
+            # the bearer of expenses and attached documents are always the same as host1 
+            'bearer': host_fields[f'host1_combo_bearer_of_expenses'].get(),
+            'attached': host_fields[f'host1_entry_attached_documents'].get(),
+        }))
 
 
 # generate the docx with the input info
@@ -123,14 +125,14 @@ def generate_doc():
     doc = None
     guest_fields = vars.field_dicts[0]
     host_fields = vars.field_dicts[1]
-    finances_fields = vars.field_dicts[2]
+    # finances_fields = vars.field_dicts[2]
 
     # initiate the data and document
     try:
         data = process_data()
         doc = Document(data['input_file'])
     except Exception as e:
-        popup(title="", message='Exception in process_data(): ' + str(e), corner_radius=4)
+        ErrorPopup(msg=f'Exception in process_data(): {str(e)}')
         return False
 
     # replace placeholders on the document
@@ -143,14 +145,14 @@ def generate_doc():
                         current_replace = value
                         run.text = run.text.replace(key, value)
     except Exception as e:
-        popup(title="", message=f'Exception while editing document\n\nPlacing {current_replace}\n\n{e}', corner_radius=4)
+        ErrorPopup(msg=f'Exception while editing document\n\nPlacing {current_replace}\n\n{e}')
         return False
 
     # invitation letter intro
     insert_paragraph(
         paragraph=doc.add_paragraph(),
         text=(
-            f"This letter is to express me and my {host_fields['host2_entry_relation_to_host1'].get()}'s interest in inviting {guest_fields['guest1_entry_name'].get()} Canada " + 
+            f"This letter is to express me and my {host_fields['host2_entry_relationship_to_host1'].get()}'s interest in inviting {guest_fields['guest1_entry_name'].get()} Canada " + 
             f"and to furthermore support the Temporary Resident Visa application."
         )
     )
@@ -159,12 +161,12 @@ def generate_doc():
     for index in range(1,3):
         insert_table(
             document=doc, 
-            table_heading="\nMy details are as follows," if index==1 else f"\n\nMy {host_fields['host1_entry_relation_to_host2'].get()}'s details are as follows,", 
+            table_heading="\nMy details are as follows," if index==1 else f"\n\nMy {host_fields['host1_entry_relationship_to_host2'].get()}'s details are as follows,", 
             table_items=[
                 {"label": "Full Name", "info": host_fields[f'host{index}_entry_name'].get()},
-                {"label": "Date of Birth", "info": host_fields[f'host{index}_entry_birth'].get()},
+                {"label": "Date of Birth", "info": host_fields[f'host{index}_datepicker_birth'].get()},
                 {"label": "Canadian Status", "info": host_fields[f'host{index}_entry_status'].get()},
-                {"label": "Passport Number", "info": host_fields[f'host{index}_entry_passport'].get()},
+                {"label": "Passport Number", "info": host_fields[f'host{index}_entry_passport_number'].get()},
                 {"label": "Residential Address", "info": host_fields[f'host{index}_entry_address'].get()},
                 {"label": "Phone Number", "info": host_fields[f'host{index}_entry_phone'].get()},
                 {"label": "Current Occupation", "info": host_fields[f'host{index}_entry_occupation'].get()},
@@ -187,6 +189,8 @@ def generate_doc():
             table_items=[
                 {"label": "Full Name", "info": guest.get('name')},
                 {"label": "Date of Birth", "info": guest.get('birth')},
+                {"label": "Citizen of", "info": guest.get('citizenship')},
+                {"label": "Passport No.", "info": guest.get('passport')},
                 {"label": "Residential Address", "info": guest.get('address')},
                 {"label": "Phone Number", "info": guest.get('phone')},
                 {"label": "Current Occupation", "info": guest.get('occupation')},
@@ -198,23 +202,23 @@ def generate_doc():
             ]
         )
 
-        if (i==1) and len(guests_list) == 3:
-            doc.add_page_break()
-
         if i < 3:
             insert_paragraph(
                 paragraph=doc.add_paragraph(),
                 text=("")
             )
 
+    bearer = host_fields["host1_combo_bearer_of_expenses"].get()
+    attached = host_fields["host1_entry_attached_documents"].get()
+
     outro_text=(
         f"The airfare, travel expenses, would be borne by {format_collective_names(guests_list)}. " +
-        f"All expenses in connection with their visit to Canada will be {finances_fields['finances_combo_bearer_of_expenses'].get()}. "
+        f"All expenses in connection with their visit to Canada will be {bearer}. "
     )
 
     # attached documents
-    if len(finances_fields['finances_entry_attached_documents'].get()) > 0:
-        outro_text += f"\n\nAttached with the application are {finances_fields['finances_entry_attached_documents'].get()}. "
+    if len(attached) > 0:
+        outro_text += f"\n\nAttached with the application are {attached}. "
 
     outro_text += f"\n\nIf any clarification or information is required, please do not hesitate to contact us at our email addresses and phone numbers below."
 
@@ -239,8 +243,42 @@ def generate_doc():
         }
     )
 
-    # create the output file
-    save_doc(doc, data)
+    if (user_confirmation()):
+        # create the output file
+        save_doc(doc, data)
+
+
+# prompts user for confirmation before generating the document
+def user_confirmation():
+    entity_types = [
+        "guest 1",
+        "guest 2",
+        "guest 3",
+        "host 1",
+        "host 2",
+    ]
+
+    for i, entity in enumerate(guests_list + hosts_list):
+        response = entity.is_filled()
+
+        if response[0] is not True:
+
+            # print(list((set(entity.get_valid_props())) - set(response[1])))
+
+            # if list((set(entity.get_valid_props())) - set(response[1])) == ["arrival", "departure", "birth"]:
+            #     msg = f"{entity_types[i].capitalize()} is empty.\n\nContinue?"
+            # else:
+            #    msg = f"The following field(s) in {entity_types[i].capitalize()} are not filled:\n\n     • {("\n     • ").join(response[1])}\n\nContinue?"
+
+            msg = f"The following field(s) in {entity_types[i].capitalize()} are not filled:\n\n     • {("\n     • ").join(response[1])}\n\nContinue?"
+
+            prompt = PromptPopup(msg=msg)
+
+            if prompt.get() is not True:
+                # InfoPopup(msg="Operation cancelled.")
+                return False
+
+    return True
 
 
 # set up folders and save files, print if needed
@@ -259,9 +297,9 @@ def save_doc(doc, data):
 
         # return the filename
         return data['output_file']
+
     except Exception as e:
-        ic(e)
-        popup(title="", message='Exception: ' + str(e), corner_radius=4)
+        ErrorPopup(msg=f"Exception when saving and opening document:\n\n{str(e)}")
         return False
 
 
