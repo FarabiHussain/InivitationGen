@@ -127,6 +127,4 @@ vars.form['clear_btn'].place(x=w-485, y=h-60)
 vars.form['docx_btn'].place(x=w-395, y=h-60)
 vars.form['output_btn'].place(x=w-305, y=h-60)
 
-testfill_fields()
-generate_doc()
 vars.root.mainloop()
