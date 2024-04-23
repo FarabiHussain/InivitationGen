@@ -27,7 +27,7 @@ except Exception as e:
     pass
 
 vars.root.configure(fg_color='white')
-vars.root.title(f"AMCAIM Invitation Generator ({vars.form['version']})")
+vars.root.title(f"AMCAIM InvitationGen ({vars.form['version']})")
 
 cwd = os.getcwd()
 font_family = vars.font_family

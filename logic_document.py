@@ -62,7 +62,7 @@ def initialize_data():
     return {
         'form_data': form_data, 
         'input_file': resource_path(f"assets\\templates\\{'2x_host' if entities['host_2'] is not None else '1x_host'}.docx"), 
-        'output_file': f"{(datetime.datetime.now().timestamp())}.docx"
+        'output_file': f"[{(datetime.datetime.now().timestamp())}] - {entities['host_1'].get('name')}.docx"
     }
 
 

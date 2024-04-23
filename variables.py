@@ -15,7 +15,7 @@ def init():
     root.resizable(False, False)
     font_family = ctk.CTkFont(family="Roboto Bold")
     screen_sizes = {"ws": root.winfo_screenwidth(), "hs": root.winfo_screenheight()}
-    form = {"version": "v1.0.0"}
+    form = {"version": "v0.0.2"}
     popups = {"printer": None, "history": None, "elem": {}}
     icons = populate_icons()
     generic_counter = 0
