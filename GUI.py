@@ -48,7 +48,7 @@ class ComboBox(GUI):
         self.input_name = (self.input_name).replace("_input", "_combobox")
         self.options = options
 
-        vars.form[self.textV_name] = StringVar(value="no options added" if options is None else 'click to choose')
+        vars.form[self.textV_name] = StringVar(value="no options added" if options is None else 'click to select')
 
         vars.form[self.input_name] = ctk.CTkComboBox(
             master,
@@ -67,10 +67,14 @@ class ComboBox(GUI):
 
     def get(self) -> str:
         """returns the first option if nothing was selected"""
-        if vars.form[self.textV_name].get() == 'click to choose':
+        if vars.form[self.textV_name].get() == 'click to select':
             return self.options[0]
         else:
             return vars.form[self.textV_name].get()
+        
+    def reset(self) -> None:
+        textvar = vars.form[self.textV_name]
+        textvar.set('click to select')
 
 
 class Entry(GUI):
@@ -245,17 +249,17 @@ class DatePicker(GUI):
 
 class InfoPopup():
     def __init__(self, msg="InfoPopup") -> None:
-        CTkMessagebox(title="Info", message=msg)
+        CTkMessagebox(title="Info", message=f"\n{msg}\n", height=250)
 
 
 class ErrorPopup():
     def __init__(self, msg="ErrorPopup") -> None:
-        CTkMessagebox(title="Error", message=msg, icon="cancel")
+        CTkMessagebox(title="Error", message=f"\n{msg}\n", icon="cancel", height=250)
 
 
 class PromptPopup():
     def __init__(self, msg="PromptPopup", func=lambda:()) -> None:
-        self.prompt = CTkMessagebox(title="Confirm", message=msg, icon="question", option_1="Yes", option_2="Cancel")
+        self.prompt = CTkMessagebox(title="Confirm", message=f"\n{msg}\n", icon="question", option_1="Yes", option_2="Cancel", height=250)
         self.func = func
 
         if (self.prompt.get() == "Yes"):

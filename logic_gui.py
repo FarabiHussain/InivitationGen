@@ -30,32 +30,32 @@ def testfill_fields():
         names.get_full_name(gender=random.choice(['male', 'female'])),
     ]
 
-    # for idx in range(random.randint(1,3)):
-    for idx in range(1):
-        guest_fields[f"guest{idx+1}_entry_name"].set(guest_names[idx])
-        guest_fields[f"guest{idx+1}_datepicker_birth"].set(m=random.randint(0,11), d=random.randint(1,28), y=random.randint(2000,2010))
-        # guest_fields[f"guest{idx+1}_entry_citizenship"].set("United Kingdom")
-        guest_fields[f"guest{idx+1}_entry_passport_number"].set(f"{str(random.randint(1000000, 9999999))}")
-        guest_fields[f"guest{idx+1}_entry_address"].set("3 Richmond Road, London, WC10 3YT, UK")
-        guest_fields[f"guest{idx+1}_entry_phone"].set(f"{random.choice(["431", "204"])}{str(random.randint(1000000, 9999999))}")
-        guest_fields[f"guest{idx+1}_entry_occupation"].set("Student")
-        guest_fields[f"guest{idx+1}_entry_purpose"].set("Visit")
-        guest_fields[f"guest{idx+1}_entry_relationship_to_host1"].set("Sibling")
-        guest_fields[f"guest{idx+1}_entry_canadian_address"].set("3386 St Marys Rd, Winnipeg, MB R3B 3K6")
+
+    for i in range(1):
+        guest_fields[f"guest{i+1}_entry_name"].set(guest_names[i])
+        guest_fields[f"guest{i+1}_datepicker_birth"].set(m=random.randint(0,11), d=random.randint(1,28), y=random.randint(2000,2010))
+        guest_fields[f"guest{i+1}_entry_citizenship"].set("United Kingdom")
+        guest_fields[f"guest{i+1}_entry_passport_number"].set(f"{str(random.randint(1000000, 9999999))}")
+        guest_fields[f"guest{i+1}_entry_address"].set("3 Richmond Road, London, WC10 3YT, UK")
+        guest_fields[f"guest{i+1}_entry_phone"].set(f"{random.choice(["431", "204"])}{str(random.randint(1000000, 9999999))}")
+        guest_fields[f"guest{i+1}_entry_occupation"].set("Student")
+        guest_fields[f"guest{i+1}_entry_purpose"].set("Visit")
+        guest_fields[f"guest{i+1}_entry_relationship_to_host1"].set("Sibling")
+        guest_fields[f"guest{i+1}_entry_canadian_address"].set("3386 St Mary's Rd, Winnipeg, MB R3B 3K6")
 
     guest_fields[f"guest1_datepicker_arrival"].set(m="Aug", d=15, y=2024)
     guest_fields[f"guest1_datepicker_departure"].set(m="Aug", d=30, y=2024)
 
-    for idx in range(2):
-        host_fields[f"host{idx+1}_entry_name"].set(host_names[idx])
-        host_fields[f"host{idx+1}_datepicker_birth"].set(m=random.randint(0,11), d=random.randint(1,28), y=random.randint(1970,2000))
-        host_fields[f"host{idx+1}_entry_status"].set("Citizen")
-        host_fields[f"host{idx+1}_entry_passport_number"].set("YYYYYYYYY")
-        host_fields[f"host{idx+1}_entry_address"].set("3386 St Marys Rd, Winnipeg, MB R3B 3K6")
-        host_fields[f"host{idx+1}_entry_email"].set(host_names[idx].replace(" ", "").lower() + "@email.com")
-        host_fields[f"host{idx+1}_entry_occupation"].set("Project Manager")
-        host_fields[f"host{idx+1}_entry_phone"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
-        host_fields[f"host{1 if idx == 0 else 2}_entry_relationship_to_host{2 if idx == 0 else 1}"].set("Husband" if idx == 0 else "Wife" )
+    for i in range(2):
+        host_fields[f"host{i+1}_entry_name"].set(host_names[i])
+        host_fields[f"host{i+1}_datepicker_birth"].set(m=random.randint(0,11), d=random.randint(1,28), y=random.randint(1970,2000))
+        host_fields[f"host{i+1}_entry_status"].set("Citizen")
+        host_fields[f"host{i+1}_entry_passport_number"].set("YYYYYYYYY")
+        host_fields[f"host{i+1}_entry_address"].set("3386 St Mary's Rd, Winnipeg, MB R3B 3K6")
+        host_fields[f"host{i+1}_entry_email"].set(host_names[i].replace(" ", "").lower() + "@email.com")
+        host_fields[f"host{i+1}_entry_occupation"].set("Project Manager")
+        host_fields[f"host{i+1}_entry_phone"].set(random.choice(["431", "204"]) + str(random.randint(1000000, 9999999)))
+        host_fields[f"host{1 if i == 0 else 2}_entry_relationship_to_host{2 if i == 0 else 1}"].set("Husband" if i == 0 else "Wife" )
 
 
 # perform a check for the presence of special characters

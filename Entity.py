@@ -15,7 +15,7 @@ class Entity:
                 print(f"{prop} is not a valid property of Guest object.")
 
 
-    def is_filled(self) -> tuple:
+    def is_complete(self) -> tuple[bool, list[str]]:
         if self.properties is None:
             return False
 
@@ -28,7 +28,14 @@ class Entity:
         if len(invalid_props) is not 0:
             return (False, invalid_props)
 
-        return (True, None)
+        return (True, invalid_props)
+    
+    
+    def is_prop_blank(self, prop: str = "") -> bool:
+        if prop is None or len(self.properties[prop].strip()) == 0:
+            return True
+        
+        return False
 
 
     def set(self, prop: str, value: str) -> bool:
@@ -80,11 +87,24 @@ class Guest(Entity):
 
         super().__init__(new_props, self.valid_props)
 
+
     def is_empty(self) -> bool:
+
+        # ignore the following datepickers as they default to today's dates
         valid_props = self.get_valid_props()
         valid_props.remove("arrival")
         valid_props.remove("departure")
         valid_props.remove("birth")
+
+        # retrieve unfilled fields 
+        empty_fields = self.is_complete()[1]
+
+        # find fields that should be filled
+        # if all remaining fields are unfilled, the Guest object is empty
+        if len(set(valid_props) - set(empty_fields)) == 0:
+            return True
+
+        return False
 
 
 class Host(Entity):
@@ -104,4 +124,22 @@ class Host(Entity):
         ]
 
         super().__init__(new_props, self.valid_props)
+
+
+    def is_empty(self) -> bool:
+        valid_props = self.get_valid_props()
+        valid_props.remove("birth") # defaults to today's dates
+        valid_props.remove("bearer") # not needed in host 2
+        valid_props.remove("attached") # optional
+        valid_props.remove("relation_to_other_host") # not needed when 2nd host does not exist
+
+        # retrieve unfilled fields 
+        empty_fields = self.is_complete()[1]
+
+        # find fields that should be filled
+        # if all remaining fields are unfilled, the Guest object is empty
+        if len(set(valid_props) - set(empty_fields)) == 0:
+            return True
+
+        return False
 
