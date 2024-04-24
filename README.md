@@ -14,4 +14,4 @@ InivitationGen allows quick generation of boilerplate invitaion letters and stat
 
 # Build manually:
 1. run ```pip install CTkMessagebox pyinstaller customtkinter docx2pdf python-docx python-dateutil``` 
-2. run ```python -m PyInstaller main.py --onefile -w --icon=assets\icons\logo.ico --name="PayTrack"```
+2. run ```python -m PyInstaller main.py --onefile -w --icon=assets\icons\logo.ico --name="InivitationGen"```
