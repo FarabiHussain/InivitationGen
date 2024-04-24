@@ -1,5 +1,5 @@
 # PayTrack
-PayTrack provides a GUI for AMCAIM staff that allows easy creation of payment invoices.
+InivitationGen allows quick generation of boilerplate invitaion letters and statutory declarations.
 
 # Usage
 - download the latest build.
