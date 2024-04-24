@@ -1,5 +1,5 @@
 # InivitationGen
-InivitationGen allows quick generation of boilerplate invitaion letters and statutory declarations.
+InivitationGen allows quick generation of boilerplate inivitation letters and statutory declarations.
 
 # Usage
 - download the latest build.
