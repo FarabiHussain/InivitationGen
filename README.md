@@ -1,4 +1,4 @@
-# PayTrack
+# InivitationGen
 InivitationGen allows quick generation of boilerplate invitaion letters and statutory declarations.
 
 # Usage
