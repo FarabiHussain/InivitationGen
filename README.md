@@ -15,4 +15,7 @@ The `arrival` and `departure` dates for the guests are only available in the `Gu
 Guest(s) arriving at different date needs to be included in a new invitation letter.
 
 The `bearer` field are selectable only from `Host 1`, and is carried over to `Host 2`. It defaults to the hosts paying for their guests' expenses if nothing was selected.
+
 The `attached` field is only available to `Host 1`, and is optional. If nothing was selected, the paragraph will be skipped entirely in the output letter.
+
+The generated letter will be opened automatically and the user is then able to make any changes that is necessary on the Word document.
