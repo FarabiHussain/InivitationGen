@@ -229,7 +229,7 @@ def add_intro(doc):
 
     if entities['host_2'] is not None:
         intro_text = (
-            f"This letter is to express me and my {entities['host_1'].get('relation_to_other_host')}'s " +
+            f"This letter is to express me and my {(entities['host_2'].get('relation_to_other_host')).lower()}'s " +
             f"interest in inviting {format_collective_names(entities)} to Canada " + 
             f"and to furthermore support their Temporary Resident Visa application."
         )
