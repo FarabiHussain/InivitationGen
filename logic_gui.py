@@ -31,7 +31,7 @@ def testfill_fields():
     ]
 
 
-    for i in range(random.randint(0,3)):
+    for i in range(random.randint(1,3)):
         guest_fields[f"guest{i+1}_entry_name"].set(guest_names[i])
         guest_fields[f"guest{i+1}_datepicker_birth"].set(m=random.randint(0,11), d=random.randint(1,28), y=random.randint(2000,2010))
         guest_fields[f"guest{i+1}_entry_citizenship"].set("United Kingdom")
@@ -46,7 +46,7 @@ def testfill_fields():
     guest_fields[f"guest1_datepicker_arrival"].set(m="Aug", d=15, y=2024)
     guest_fields[f"guest1_datepicker_departure"].set(m="Aug", d=30, y=2024)
 
-    for i in range(random.randint(0,2)):
+    for i in range(random.randint(1,2)):
         host_fields[f"host{i+1}_entry_name"].set(host_names[i])
         host_fields[f"host{i+1}_datepicker_birth"].set(m=random.randint(0,11), d=random.randint(1,28), y=random.randint(1970,2000))
         host_fields[f"host{i+1}_entry_status"].set("Citizen")

@@ -29,8 +29,8 @@ class Entity:
             return (False, invalid_props)
 
         return (True, invalid_props)
-    
-    
+
+
     def is_prop_blank(self, prop: str = "") -> bool:
         if prop is None or len(self.properties[prop].strip()) == 0:
             return True
@@ -142,4 +142,3 @@ class Host(Entity):
             return True
 
         return False
-

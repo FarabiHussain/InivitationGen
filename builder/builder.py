@@ -65,5 +65,3 @@ else:
 
         # add square brackets to the currently selected element
         ver[cur] = "[" + ver[cur].replace(" ", "") + "]"
-
-

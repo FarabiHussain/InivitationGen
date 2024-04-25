@@ -199,22 +199,31 @@ def user_confirmation(entities):
         return False
 
 
+    empty_entities = []
+
     for entity, label in zip(entities.values(), entities.keys()):
 
         # prompt user is an entity is None
         if entity is None:
-            if PromptPopup(msg=f"{label.capitalize()} is empty.\n\nContinue?").get() is not True:
-                InfoPopup(msg="Operation cancelled.")
-                return False
-            
+            empty_entities.append(label.capitalize())
+
         # check for unfilled fields when entity is not None
         else:
             response, invalid_fields = entity.is_complete()
+
+            # skip check for 'attached' in 'host 2'
+            if label is "host_2" and len(invalid_fields)==1 and "attached" in invalid_fields:
+                continue
 
             if response is not True:
                 if PromptPopup(msg=f"The following field(s) in {label.capitalize()} are not filled:\n\n  • {(("\n  • ").join(invalid_fields)).replace("_", " ")}\n\nContinue?").get() is not True:
                     InfoPopup(msg="Operation cancelled.")
                     return False
+
+    if PromptPopup(msg=f"The following people's info is not filled:\n\n  • {(("\n  • ").join(empty_entities)).replace("_", " ")}\n\nContinue?").get() is not True:
+        InfoPopup(msg="Operation cancelled.")
+        return False
+
 
     return True
 
