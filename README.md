@@ -5,6 +5,7 @@ InivitationGen allows quick generation of boilerplate inivitation letters and st
 The following flags may be used when building the exe:
 - `--no-selector` to skip version selector and automatically build using the next minor build number.
 - `--deps` to install dependencies.
+
 If no flags were used, no dependencies will be installed, and the builder will allow you to choose your own build version
 
 # Usage
