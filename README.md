@@ -1,5 +1,5 @@
 # InivitationGen
-InivitationGen allows quick generation of boilerplate inivitation letters and statutory declarations.
+InvitationGen allows quick generation of boilerplate inivitation letters and statutory declarations.
 
 # Build using the included `builder.py` script:
 The following flags may be used when building the exe:
